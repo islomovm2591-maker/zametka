@@ -8,147 +8,106 @@
 <body>
 <title>Mening Zametkalarim</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
-/* Layout: bitta ustun — yuqorida yozish maydoni, pastda kunlar bo'yicha guruhlangan zametkalar (chizmadagidek: sana | vaqt | matn) */
+/* Layout: oq daftar — tepada katta yozish maydoni, pastda kunlar bo'yicha zametkalar: sana | vaqt | matn */
 :root{
-  --bg:#eef1ee; --paper:#ffffff; --ink:#1d2421; --muted:#66706b; --line:#d3dad5;
-  --accent:#1f7a5a; --accent-ink:#ffffff; --danger:#b33a2f;
+  --bg:#f6f7f9; --paper:#ffffff; --ink:#16191f; --muted:#6b7280; --line:#dfe3ea;
+  --accent:#2563eb; --accent-soft:#e8efff; --accent-ink:#ffffff; --danger:#c2410c;
   --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#121614; --paper:#1b201e; --ink:#e6ece8; --muted:#94a09a; --line:#2c3430;
-  --accent:#4cc29a; --accent-ink:#0d1a15; --danger:#ef7a6e; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#121614; --paper:#1b201e; --ink:#e6ece8; --muted:#94a09a; --line:#2c3430;
-  --accent:#4cc29a; --accent-ink:#0d1a15; --danger:#ef7a6e; color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
-.wrap{max-width:720px;margin:0 auto;padding-block:28px 60px;
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5}
+.wrap{max-width:680px;margin:0 auto;padding-block:20px 60px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  display:flex;flex-direction:column;gap:22px}
-header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
-h1{font-size:1.6rem;margin:0;letter-spacing:-.01em;text-wrap:balance}
-.clock{font-family:var(--mono);color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
-form{background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
-textarea{width:100%;box-sizing:border-box;min-height:84px;resize:vertical;border:0;background:transparent;color:var(--ink);font:inherit;outline:none}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.hint{color:var(--muted);font-size:.82rem}
-button{font:inherit;cursor:pointer;border-radius:8px}
-.save{background:var(--accent);color:var(--accent-ink);border:0;padding:9px 18px;font-weight:700}
-.save:disabled{opacity:.45;cursor:default}
-button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.search{width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit}
-.status{color:var(--muted);font-size:.85rem}
-.day h2{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:700}
-.list{display:flex;flex-direction:column;border:1.5px solid var(--ink);border-radius:4px;background:var(--paper)}
-/* Har bir zametka — chizmadagi to'rtburchak: kun | oy | vaqt | matn */
-.note{display:grid;grid-template-columns:56px 64px 70px 1fr auto;align-items:stretch}
-.note+.note{border-top:1.5px solid var(--line)}
-.cell{padding:12px 10px;display:flex;align-items:center;justify-content:center;border-right:1.5px solid var(--line);min-width:0}
-.d{font-family:var(--mono);font-weight:700;font-size:1.35rem}
-.m{font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
-.t{font-family:var(--mono);font-size:.95rem;font-variant-numeric:tabular-nums}
-.txt{flex-direction:column;align-items:stretch;justify-content:center;white-space:pre-wrap;overflow-wrap:anywhere;gap:4px}
-.edited{font-size:.75rem;color:var(--muted);white-space:normal}
-.editbox textarea{width:100%;box-sizing:border-box;min-height:70px;resize:vertical;border:1.5px solid var(--accent);border-radius:8px;padding:8px;background:var(--bg);color:var(--ink);font:inherit}
-.editbar{display:flex;gap:8px;flex-wrap:wrap;white-space:normal}
-.editbar .save{padding:6px 14px;font-size:.88rem}
-.ghost{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 12px;font-size:.88rem}
-.actions{display:flex;align-items:center}
-.remindrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.88rem;color:var(--muted);white-space:normal}
-.remindrow input{font:inherit;font-size:.88rem;padding:5px 8px;border:1.5px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);max-width:100%}
-.chip{align-self:flex-start;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);white-space:normal}
-.chip.done{background:transparent;color:var(--muted);font-weight:500;padding-left:0}
-.chip.late{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
-#alerts{display:flex;flex-direction:column;gap:10px}
-#alerts:empty{display:none}
-.alert{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:14px 16px;animation:pop .35s ease}
-.alert .body{min-width:0;overflow-wrap:anywhere;white-space:pre-wrap}
-.alert small{display:block;opacity:.85;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.72rem;margin-bottom:2px}
-.alert button{border:1.5px solid currentColor;background:transparent;color:inherit;padding:5px 12px;font-size:.85rem;flex:none}
-@keyframes pop{from{transform:scale(.97);opacity:.6}to{transform:none;opacity:1}}
-@media (prefers-reduced-motion:reduce){.alert{animation:none}}
-.edit{border:0;background:none;color:var(--muted);padding:0 8px;font-size:1.05rem}
-.edit:hover{color:var(--accent)}
-.del{border:0;background:none;color:var(--muted);padding:0 14px;font-size:1.1rem}
-.del:hover{color:var(--danger)}
-.confirm{display:flex;gap:6px;align-items:center;padding:0 8px}
-.confirm button{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:4px 8px;font-size:.8rem}
-.confirm .yes{border-color:var(--danger);color:var(--danger)}
-.empty{background:var(--paper);border:1.5px dashed var(--line);border-radius:12px;padding:28px 18px;text-align:center;color:var(--muted)}
-@media (max-width:520px){
-  .note{grid-template-columns:48px 1fr auto;grid-template-rows:auto auto}
-  .d{grid-row:1/3;font-size:1.2rem}
-  .m{grid-column:2;justify-content:flex-start;border-right:0;padding-bottom:0}
-  .t{display:none}
-  .m::after{content:" · " attr(data-time);font-family:var(--mono);color:var(--muted);text-transform:none;letter-spacing:0;white-space:pre}
-  .txt{grid-column:2;grid-row:2;border-right:0;padding-top:4px}
-  .actions,.confirm{grid-column:3;grid-row:1/3}
-  .editbox{grid-column:2/4}
-}
-.hdr-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.lang{display:flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
-.lang button{border:0;border-radius:0;background:none;color:var(--muted);padding:4px 10px;font-weight:700;font-size:.8rem;letter-spacing:.04em}
+  display:flex;flex-direction:column;gap:18px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:1.5rem;font-weight:800;margin:0;letter-spacing:-.01em}
+.lang{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
+.lang button{border:0;border-radius:0;background:none;color:var(--muted);padding:6px 12px;font-weight:700;font-size:.85rem}
 .lang button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+button{font:inherit;cursor:pointer;border-radius:10px}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--accent-soft);outline-offset:1px}
+
+.composer{background:var(--paper);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(22,25,31,.06),0 6px 20px rgba(22,25,31,.06)}
+.composer label{font-weight:700;font-size:.95rem}
+.composer textarea{width:100%;box-sizing:border-box;min-height:130px;resize:vertical;border:2px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--paper);color:var(--ink);font:inherit;font-size:1.05rem}
+.composer textarea:focus{border-color:var(--accent);outline:none}
+.composer textarea::placeholder{color:#9aa1ad}
+.now{font-family:var(--mono);font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.big{width:100%;background:var(--accent);color:var(--accent-ink);border:0;padding:14px;font-weight:800;font-size:1.05rem}
+.big:active{transform:translateY(1px)}
+.flash{color:var(--accent);font-weight:700;font-size:.9rem;min-height:1.3em}
+
+.search{width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit}
+.status{color:var(--muted);font-size:.85rem}
+.status:empty{display:none}
+.day{display:flex;flex-direction:column;gap:8px}
+.day h2{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:6px 0 0;font-weight:800}
+.note{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;padding:12px 10px 12px 12px;align-items:start}
+.date{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:52px;padding:6px 4px;border-radius:10px;background:var(--accent-soft);color:var(--accent);line-height:1.1}
+.date .d{font-family:var(--mono);font-weight:700;font-size:1.3rem}
+.date .m{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.date .t{font-family:var(--mono);font-size:.75rem;margin-top:3px;color:var(--ink);font-variant-numeric:tabular-nums}
+.body{min-width:0;display:flex;flex-direction:column;gap:4px;padding-top:2px}
+.txt{white-space:pre-wrap;overflow-wrap:anywhere}
+.edited{font-size:.75rem;color:var(--muted)}
+.actions{display:flex;gap:2px}
+.icon{border:0;background:none;color:var(--muted);width:38px;height:38px;font-size:1.1rem;display:grid;place-items:center}
+.icon:hover{background:var(--bg);color:var(--ink)}
+.icon.del:hover{color:var(--danger)}
+.confirm{display:flex;flex-direction:column;gap:6px}
+.confirm button,.ghost{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 12px;font-size:.88rem}
+.confirm .yes{border-color:var(--danger);color:var(--danger);font-weight:700}
+.editbox textarea{width:100%;box-sizing:border-box;min-height:90px;resize:vertical;border:2px solid var(--accent);border-radius:10px;padding:10px;background:var(--paper);color:var(--ink);font:inherit}
+.editbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.editbar .ok{background:var(--accent);color:var(--accent-ink);border:0;padding:7px 16px;font-weight:700;font-size:.9rem}
+.empty{border:2px dashed var(--line);border-radius:14px;padding:26px 18px;text-align:center;color:var(--muted)}
 </style>
 
 <div class="wrap">
   <header>
     <h1 data-i18n="title">Zametkalarim</h1>
-    <div class="hdr-right">
-      <div class="clock" id="clock"></div>
-      <div class="lang" role="group" aria-label="Til / Язык">
-        <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
-        <button type="button" data-lang="ru" aria-pressed="false">RU</button>
-      </div>
+    <div class="lang" role="group" aria-label="Til / Язык">
+      <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
+      <button type="button" data-lang="ru" aria-pressed="false">RU</button>
     </div>
   </header>
 
-  <div id="alerts" aria-live="assertive"></div>
-
-  <form id="f">
-    <textarea id="text" data-i18n-ph="placeholder" placeholder="Nima yozmoqchisiz? Masalan: Ertaga soat 10:00 da uchrashuv"></textarea>
-    <div class="remindrow">
-      <label for="remind" data-i18n="remindLabel">Eslatma (ixtiyoriy):</label>
-      <input type="datetime-local" id="remind">
-      <button type="button" class="ghost" id="clearRemind" data-i18n="remove" hidden>Olib tashlash</button>
-    </div>
-    <div class="row">
-      <span class="hint" data-i18n="hint">Saqlanganda kun, oy, soat va daqiqa avtomatik yoziladi · Ctrl+Enter</span>
-      <button class="save" id="save" type="submit" data-i18n="save" disabled>Saqlash</button>
-    </div>
+  <form class="composer" id="f">
+    <label for="text" data-i18n="label">Bu yerga yozing</label>
+    <textarea id="text" data-i18n-ph="placeholder" placeholder="Masalan: Ertaga soat 10:00 da uchrashuv bor"></textarea>
+    <div class="now" id="now"></div>
+    <button class="big" id="save" type="submit" data-i18n="save">Saqlash</button>
+    <div class="flash" id="flash" aria-live="polite"></div>
   </form>
 
-  <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Zametkalardan qidirish…">
+  <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Qidirish…">
   <div class="status" id="status"></div>
   <div id="out"></div>
 </div>
 
 <script>
 const I18N={
-uz:{title:"Zametkalarim",placeholder:"Nima yozmoqchisiz? Masalan: Ertaga soat 10:00 da uchrashuv",remindLabel:"Eslatma (ixtiyoriy):",remove:"Olib tashlash",
- hint:"Saqlanganda kun, oy, soat va daqiqa avtomatik yoziladi · Ctrl+Enter",save:"Saqlash",search:"Zametkalardan qidirish…",loading:"Yuklanmoqda…",
+uz:{title:"Zametkalarim",label:"Bu yerga yozing",placeholder:"Masalan: Ertaga soat 10:00 da uchrashuv bor",save:"Saqlash",search:"Qidirish…",
+ willSave:"Saqlanadigan vaqt:",saved:"Saqlandi ✓",typeFirst:"Avval yuqoridagi oq maydonga biror narsa yozing.",loading:"Yuklanmoqda…",
  months:["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentabr","Oktabr","Noyabr","Dekabr"],
  monthsShort:["Yan","Fev","Mar","Apr","May","Iyun","Iyul","Avg","Sen","Okt","Noy","Dek"],
  days:["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"],
- today:"Bugun",yesterday:"Kecha",emptySearch:"Bu so'z bo'yicha zametka topilmadi.",empty:"Hali zametka yo'q. Yuqoriga birinchi zametkangizni yozing va «Saqlash» ni bosing.",
- editAria:"Zametkani tahrirlash",cancel:"Bekor qilish",past:"Eslatma vaqti o'tib ketgan. Kelajakdagi vaqtni tanlang.",remindShort:"Eslatma:",reminded:"Eslatildi:",edited:"tahrirlandi:",
- del:"O'chirish",no:"Yo'q",edit:"Tahrirlash",saveErr:"Saqlab bo'lmadi: internetni tekshirib, qayta urinib ko'ring.",updErr:"O'zgarishni saqlab bo'lmadi, qayta urinib ko'ring.",
- delErr:"O'chirib bo'lmadi, qayta urinib ko'ring.",missed:"O'tkazib yuborilgan eslatma",alert:"Eslatma",close:"Yopish",local:"Zametkalar shu brauzerda saqlanadi.",
- signin:"Hisobingizga kiring — shunda zametkalar har qanday qurilmada saqlanib qoladi. Hozircha shu brauzerda saqlanadi.",slow:"Ma'lumotlar hali yuklanmadi, internetni tekshiring.",
- loadErr:"Zametkalarni yuklab bo'lmadi. Sahifani keyinroq oching.",count:n=>`${n} ta zametka`},
-ru:{title:"Мои заметки",placeholder:"Что хотите записать? Например: Завтра в 10:00 встреча",remindLabel:"Напоминание (необязательно):",remove:"Убрать",
- hint:"При сохранении день, месяц, час и минута записываются автоматически · Ctrl+Enter",save:"Сохранить",search:"Поиск по заметкам…",loading:"Загрузка…",
+ today:"Bugun",yesterday:"Kecha",emptySearch:"Bu so'z bo'yicha zametka topilmadi.",empty:"Hali zametka yo'q. Tepadagi maydonga yozing va «Saqlash» ni bosing.",
+ editAria:"Zametkani tahrirlash",cancel:"Bekor qilish",edited:"tahrirlandi:",del:"O'chirish",no:"Yo'q",edit:"Tahrirlash",
+ saveErr:"Saqlab bo'lmadi: internetni tekshirib, qayta urinib ko'ring.",updErr:"O'zgarishni saqlab bo'lmadi, qayta urinib ko'ring.",delErr:"O'chirib bo'lmadi, qayta urinib ko'ring.",
+ local:"",signin:"",slow:"Ma'lumotlar hali yuklanmadi, internetni tekshiring.",loadErr:"Zametkalarni yuklab bo'lmadi. Sahifani keyinroq oching.",count:n=>`${n} ta zametka`},
+ru:{title:"Мои заметки",label:"Пишите здесь",placeholder:"Например: Завтра в 10:00 встреча",save:"Сохранить",search:"Поиск…",
+ willSave:"Время сохранения:",saved:"Сохранено ✓",typeFirst:"Сначала напишите что-нибудь в белом поле выше.",loading:"Загрузка…",
  months:["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"],
  monthsShort:["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"],
  days:["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
- today:"Сегодня",yesterday:"Вчера",emptySearch:"По этому запросу заметок не найдено.",empty:"Заметок пока нет. Напишите первую заметку вверху и нажмите «Сохранить».",
- editAria:"Редактировать заметку",cancel:"Отмена",past:"Время напоминания уже прошло. Выберите время в будущем.",remindShort:"Напоминание:",reminded:"Напомнено:",edited:"изменено:",
- del:"Удалить",no:"Нет",edit:"Редактировать",saveErr:"Не удалось сохранить: проверьте интернет и попробуйте снова.",updErr:"Не удалось сохранить изменения, попробуйте снова.",
- delErr:"Не удалось удалить, попробуйте снова.",missed:"Пропущенное напоминание",alert:"Напоминание",close:"Закрыть",local:"Заметки сохраняются в этом браузере.",
- signin:"Войдите в аккаунт — тогда заметки сохранятся на любом устройстве. Пока они хранятся в этом браузере.",slow:"Данные ещё не загрузились, проверьте интернет.",
- loadErr:"Не удалось загрузить заметки. Откройте страницу позже.",
+ today:"Сегодня",yesterday:"Вчера",emptySearch:"По этому запросу заметок не найдено.",empty:"Заметок пока нет. Напишите в поле вверху и нажмите «Сохранить».",
+ editAria:"Редактировать заметку",cancel:"Отмена",edited:"изменено:",del:"Удалить",no:"Нет",edit:"Редактировать",
+ saveErr:"Не удалось сохранить: проверьте интернет и попробуйте снова.",updErr:"Не удалось сохранить изменения, попробуйте снова.",delErr:"Не удалось удалить, попробуйте снова.",
+ local:"",signin:"",slow:"Данные ещё не загрузились, проверьте интернет.",loadErr:"Не удалось загрузить заметки. Откройте страницу позже.",
  count:n=>{const a=n%10,b=n%100;const w=a===1&&b!==11?"заметка":a>=2&&a<=4&&(b<12||b>14)?"заметки":"заметок";return `${n} ${w}`}}
 };
 let lang="uz";
@@ -156,25 +115,24 @@ try{const s=localStorage.getItem("zametka-lang");lang=I18N[s]?s:(navigator.langu
 const T=k=>I18N[lang][k];
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,"0");
-let notes=[], col=null, pending=null, mode="local", editing=null, draft="", draftRemind="", focusEdit=false, statusKey=null;
-const toInput=ts=>{const d=new Date(ts);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`};
-const toTs=v=>{if(!v)return null;const t=new Date(v).getTime();return isNaN(t)?null:t};
+let notes=[], col=null, pending=null, mode="local", editing=null, draft="", focusEdit=false, statusKey=null, flashTimer=null;
 const fmt=ts=>{const d=new Date(ts);return `${d.getDate()} ${T("monthsShort")[d.getMonth()]}, ${pad(d.getHours())}:${pad(d.getMinutes())}`};
 function setStatus(k){statusKey=k;showStatus()}
 function showStatus(){$("status").textContent=!statusKey?"":statusKey==="count"?(notes.length?T("count")(notes.length):""):T(statusKey)}
+function flash(k){$("flash").textContent=T(k);clearTimeout(flashTimer);flashTimer=setTimeout(()=>{$("flash").textContent=""},2500)}
 
 function applyLang(){
   document.documentElement.lang=lang;
   document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=T(el.dataset.i18n)});
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{el.placeholder=T(el.dataset.i18nPh)});
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
-  if(!$("alerts").children.length)document.title=T("title");
+  document.title=T("title"); $("flash").textContent="";
   tick();showStatus();render();
 }
 document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;try{localStorage.setItem("zametka-lang",lang)}catch(e){}applyLang()}));
 
-function tick(){const d=new Date();$("clock").textContent=`${d.getDate()} ${T("months")[d.getMonth()]} ${d.getFullYear()}, ${T("days")[d.getDay()]} · ${pad(d.getHours())}:${pad(d.getMinutes())}`}
-setInterval(tick,15000);
+function tick(){const d=new Date();$("now").textContent=`${T("willSave")} ${d.getDate()} ${T("months")[d.getMonth()]} ${d.getFullYear()}, ${T("days")[d.getDay()]} · ${pad(d.getHours())}:${pad(d.getMinutes())}`}
+setInterval(tick,10000);
 
 function dayLabel(d){
   const now=new Date(), y=new Date(now); y.setDate(now.getDate()-1);
@@ -182,98 +140,74 @@ function dayLabel(d){
   const base=`${d.getDate()} ${T("months")[d.getMonth()]}${d.getFullYear()!==now.getFullYear()?" "+d.getFullYear():""}, ${T("days")[d.getDay()]}`;
   return same(d,now)?T("today")+" — "+base:same(d,y)?T("yesterday")+" — "+base:base;
 }
+const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!=null)x.textContent=text;return x};
 
 function render(){
   const q=$("q").value.trim().toLowerCase();
   const list=notes.filter(n=>!q||n.text.toLowerCase().includes(q)).sort((a,b)=>b.at-a.at);
   const out=$("out"); out.textContent="";
-  if(!list.length){
-    const e=document.createElement("div"); e.className="empty";
-    e.textContent=q?T("emptySearch"):T("empty");
-    out.append(e); return;
-  }
+  if(!list.length){out.append(el("div","empty",q?T("emptySearch"):T("empty")));return}
   const groups=new Map();
   for(const n of list){const d=new Date(n.at),k=d.toDateString(); if(!groups.has(k))groups.set(k,{d,items:[]}); groups.get(k).items.push(n)}
+  const wrap=el("div"); wrap.style.cssText="display:flex;flex-direction:column;gap:16px";
   for(const {d,items} of groups.values()){
-    const sec=document.createElement("section"); sec.className="day";
-    const h=document.createElement("h2"); h.textContent=dayLabel(d); sec.append(h);
-    const box=document.createElement("div"); box.className="list";
+    const sec=el("section","day"); sec.append(el("h2",null,dayLabel(d)));
     for(const n of items){
-      const t=new Date(n.at), time=`${pad(t.getHours())}:${pad(t.getMinutes())}`;
-      const row=document.createElement("div"); row.className="note";
-      const c=(cls,txt)=>{const x=document.createElement("div");x.className="cell "+cls;x.textContent=txt;return x};
-      const m=c("m",T("monthsShort")[t.getMonth()]); m.dataset.time=time;
-      let txt;
+      const t=new Date(n.at);
+      const row=el("div","note");
+      const date=el("div","date"); date.append(el("span","d",t.getDate()),el("span","m",T("monthsShort")[t.getMonth()]),el("span","t",`${pad(t.getHours())}:${pad(t.getMinutes())}`));
+      const body=el("div","body");
       if(editing===n.id){
-        txt=document.createElement("div"); txt.className="cell txt editbox";
-        const ta=document.createElement("textarea"); ta.id="edit-"+n.id; ta.value=draft; ta.setAttribute("aria-label",T("editAria"));
-        ta.oninput=()=>{draft=ta.value};
-        const bar=document.createElement("div"); bar.className="editbar";
-        const ok=document.createElement("button"); ok.className="save"; ok.textContent=T("save");
-        const no=document.createElement("button"); no.className="ghost"; no.textContent=T("cancel");
-        ok.onclick=()=>{const v=draft.trim(); if(!v)return; const r=toTs(draftRemind); if(r&&r!==n.remindAt&&r<=Date.now()){setStatus("past");return} update(n.id,v,r)};
-        const rr=document.createElement("div"); rr.className="remindrow";
-        const rl=document.createElement("label"); rl.textContent=T("remindShort"); rl.htmlFor="er-"+n.id;
-        const ri=document.createElement("input"); ri.type="datetime-local"; ri.id="er-"+n.id; ri.value=draftRemind; ri.oninput=()=>{draftRemind=ri.value};
-        const rc=document.createElement("button"); rc.type="button"; rc.className="ghost"; rc.textContent=T("remove"); rc.onclick=()=>{draftRemind="";ri.value=""};
-        rr.append(rl,ri,rc);
+        body.classList.add("editbox");
+        const ta=el("textarea"); ta.id="edit-"+n.id; ta.value=draft; ta.setAttribute("aria-label",T("editAria")); ta.oninput=()=>{draft=ta.value};
+        const bar=el("div","editbar");
+        const ok=el("button","ok",T("save")); const no=el("button","ghost",T("cancel"));
+        ok.onclick=()=>{const v=draft.trim(); if(v)update(n.id,v)};
         no.onclick=()=>{editing=null;render()};
         ta.addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();ok.click()} if(e.key==="Escape")no.click()});
-        bar.append(ok,no); txt.append(ta,rr,bar);
+        bar.append(ok,no); body.append(ta,bar);
         if(focusEdit){focusEdit=false; setTimeout(()=>{ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)})}
       }else{
-        txt=c("txt",n.text);
-        if(n.remindAt){const ch=document.createElement("span"); const late=!n.reminded&&n.remindAt<=Date.now(); ch.className="chip"+(n.reminded?" done":late?" late":""); ch.textContent=T(n.reminded?"reminded":"remindShort")+" "+fmt(n.remindAt); txt.append(ch)}
-        if(n.edited){const s=document.createElement("span"); s.className="edited"; s.textContent=T("edited")+" "+fmt(n.edited); txt.append(s)}
+        body.append(el("div","txt",n.text));
+        if(n.edited)body.append(el("span","edited",T("edited")+" "+fmt(n.edited)));
       }
-      row.append(c("d",t.getDate()),m,c("t",time),txt);
-      if(editing===n.id){/* tahrirlash paytida tugmalar yashirin */}
+      row.append(date,body);
+      if(editing===n.id){row.style.gridTemplateColumns="auto 1fr"}
       else if(pending===n.id){
-        const cf=document.createElement("div"); cf.className="confirm";
-        const y=document.createElement("button"); y.className="yes"; y.textContent=T("del"); y.onclick=()=>remove(n.id);
-        const no=document.createElement("button"); no.textContent=T("no"); no.onclick=()=>{pending=null;render()};
+        const cf=el("div","confirm");
+        const y=el("button","yes",T("del")); y.onclick=()=>remove(n.id);
+        const no=el("button",null,T("no")); no.onclick=()=>{pending=null;render()};
         cf.append(y,no); row.append(cf);
       }else{
-        const acts=document.createElement("div"); acts.className="actions";
-        const ed=document.createElement("button"); ed.className="edit"; ed.title=T("edit"); ed.setAttribute("aria-label",T("edit")); ed.textContent="✎";
-        ed.onclick=()=>{editing=n.id;draft=n.text;draftRemind=n.remindAt?toInput(n.remindAt):"";pending=null;focusEdit=true;render()};
-        const del=document.createElement("button"); del.className="del"; del.title=T("del"); del.setAttribute("aria-label",T("del")); del.textContent="✕";
+        const acts=el("div","actions");
+        const ed=el("button","icon","✎"); ed.title=T("edit"); ed.setAttribute("aria-label",T("edit"));
+        ed.onclick=()=>{editing=n.id;draft=n.text;pending=null;focusEdit=true;render()};
+        const del=el("button","icon del","✕"); del.title=T("del"); del.setAttribute("aria-label",T("del"));
         del.onclick=()=>{pending=n.id;editing=null;render()};
         acts.append(ed,del); row.append(acts);
       }
-      box.append(row);
+      sec.append(row);
     }
-    sec.append(box); out.append(sec);
+    wrap.append(sec);
   }
+  out.append(wrap);
 }
 
 function saveLocal(){try{localStorage.setItem("zametkalar",JSON.stringify(notes))}catch(e){}}
 function loadLocal(){try{notes=JSON.parse(localStorage.getItem("zametkalar")||"[]")}catch(e){notes=[]}}
 
-async function add(text,remindAt){
+async function add(text){
   const n={text,at:Date.now()};
-  if(remindAt){n.remindAt=remindAt;n.reminded=false}
-  if(mode==="db"){
-    try{await col.add(n)}catch(e){setStatus("saveErr")}
-  }else{n.id=String(n.at);notes.push(n);saveLocal();render()}
+  if(mode==="db"){try{await col.add(n)}catch(e){setStatus("saveErr")}}
+  else{n.id=String(n.at);notes.push(n);saveLocal();render()}
 }
-async function update(id,text,remindAt){
+async function update(id,text){
   editing=null;
   const n=notes.find(x=>x.id===id);
-  const remindChanged=n&&(n.remindAt||null)!==(remindAt||null);
-  if(n&&n.text===text&&!remindChanged){render();return}
-  const patch={};
-  if(!n||n.text!==text){patch.text=text;patch.edited=Date.now()}
-  if(remindChanged){patch.remindAt=remindAt||null;patch.reminded=false}
-  if(mode==="db"){
-    render();
-    try{await col.doc(id).update(patch)}catch(e){setStatus("updErr")}
-  }else{if(n)Object.assign(n,patch); saveLocal();render()}
-}
-async function markReminded(n){
-  n.reminded=true;
-  if(mode==="db"){try{await col.doc(n.id).update({reminded:true})}catch(e){}}
-  else saveLocal();
+  if(n&&n.text===text){render();return}
+  const patch={text,edited:Date.now()};
+  if(mode==="db"){render();try{await col.doc(id).update(patch)}catch(e){setStatus("updErr")}}
+  else{if(n)Object.assign(n,patch);saveLocal();render()}
 }
 async function remove(id){
   pending=null;
@@ -281,57 +215,25 @@ async function remove(id){
   else{notes=notes.filter(n=>n.id!==id);saveLocal();render()}
 }
 
-$("text").addEventListener("input",()=>{$("save").disabled=!$("text").value.trim()});
 $("text").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();$("f").requestSubmit()}});
-$("f").addEventListener("submit",e=>{e.preventDefault();const v=$("text").value.trim();if(!v)return;
-  const r=toTs($("remind").value);
-  if(r&&r<=Date.now()){setStatus("past");return}
-  if(r){try{if("Notification" in window&&Notification.permission==="default")Notification.requestPermission()}catch(e){}}
-  add(v,r);$("text").value="";$("remind").value="";$("clearRemind").hidden=true;$("save").disabled=true;$("text").focus()});
-$("remind").addEventListener("input",()=>{$("clearRemind").hidden=!$("remind").value});
-$("remind").addEventListener("focus",()=>{if(!$("remind").value){const d=new Date(Date.now()+3600e3);d.setMinutes(0);$("remind").value=toInput(d);$("clearRemind").hidden=false}});
-$("clearRemind").addEventListener("click",()=>{$("remind").value="";$("clearRemind").hidden=true});
-
-/* Eslatmalar: sahifa ochiq turganda vaqti kelganda ovoz + banner */
-let actx=null;
-const unlockAudio=()=>{try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume()}catch(e){}};
-window.addEventListener("pointerdown",unlockAudio);window.addEventListener("keydown",unlockAudio);
-function beep(){if(!actx)return;try{const t0=actx.currentTime;[0,.3,.6].forEach((dt,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=i===2?1046:880;g.gain.setValueAtTime(0,t0+dt);g.gain.linearRampToValueAtTime(.25,t0+dt+.02);g.gain.exponentialRampToValueAtTime(.001,t0+dt+.25);o.connect(g).connect(actx.destination);o.start(t0+dt);o.stop(t0+dt+.3)})}catch(e){}}
-function showAlert(n,missed){
-  const a=document.createElement("div");a.className="alert";a.setAttribute("role","alert");
-  const b=document.createElement("div");b.className="body";
-  const s=document.createElement("small");s.textContent=T(missed?"missed":"alert")+" · "+fmt(n.remindAt);
-  b.append(s,document.createTextNode(n.text));
-  const x=document.createElement("button");x.textContent=T("close");x.onclick=()=>{a.remove();if(!$("alerts").children.length)document.title=T("title")};
-  a.append(b,x);$("alerts").prepend(a);
-  document.title="⏰ "+n.text.slice(0,40);
-  try{if("Notification" in window&&Notification.permission==="granted")new Notification(T("alert"),{body:n.text})}catch(e){}
-}
-let ready=false;
-function checkReminders(){
-  if(!ready)return;
-  const now=Date.now();let rang=false;
-  for(const n of notes){if(n.remindAt&&!n.reminded&&n.remindAt<=now){showAlert(n,now-n.remindAt>120000);markReminded(n);rang=true}}
-  if(rang){beep();render()}
-}
-setInterval(checkReminders,5000);
+$("f").addEventListener("submit",e=>{e.preventDefault();const v=$("text").value.trim();
+  if(!v){flash("typeFirst");$("text").focus();return}
+  tick();add(v);$("text").value="";flash("saved")});
 $("q").addEventListener("input",render);
 
 loadLocal(); applyLang();
-setTimeout(()=>{if(mode==="local"){ready=true;checkReminders()}},1500);
 
 (async()=>{
-  const use=window.claude&&window.claude.use;
-  if(!use){setStatus("local");return}
+  if(!(window.claude&&window.claude.use))return;
   const [db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
   const id=user&&await user.id();
-  if(!db||!id){setStatus("signin");return}
+  if(!db||!id)return;
   col=db.collection("data/users/"+id+"/notes"); mode="db";
   setStatus("loading");
   const timer=setTimeout(()=>{setStatus("slow")},10000);
   col.onSnapshot(snap=>{
     notes=snap.docs.map(d=>({id:d.id,...d.data()})).filter(n=>typeof n.text==="string"&&typeof n.at==="number");
-    if(!snap.metadata.fromCache){clearTimeout(timer);if(!ready){ready=true;setTimeout(checkReminders,0)}setStatus("count")}
+    if(!snap.metadata.fromCache){clearTimeout(timer);setStatus("count")}
     render();
   },err=>{clearTimeout(timer);setStatus("loadErr")});
 })();
