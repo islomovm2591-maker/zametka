@@ -13,159 +13,198 @@
 <body>
 <title>Mening Daftarlarim</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
-/* Layout: oq daftar ilovasi — bosh sahifada daftarlar ro'yxati; daftar ichida har bir qator o'z sanasi va vaqti bilan, pastda yozish qatori */
+/* Layout: maktab daftari — bosh sahifada rangli muqovalar (2 ustun), ichida katakli qog'oz: qizil hoshiyada vaqt, chiziqlarda matn, pastda yozish paneli */
 :root{
-  --bg:#f6f7f9; --paper:#ffffff; --ink:#16191f; --muted:#6b7280; --line:#e3e7ee; --rule:#eef1f6;
-  --accent:#2563eb; --accent-soft:#e8efff; --accent-ink:#ffffff; --danger:#c2410c;
-  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --bg:#f3f1ec; --paper:#fffefb; --ink:#1b1d22; --muted:#6f7480; --line:#e4e1d9;
+  --rule:#d9e4f2; --margin:#f0a3a3; --cover:#2563eb; --cover-ink:#ffffff;
+  --accent:#2563eb; --danger:#c2410c;
+  --sans:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
   color-scheme:light;
 }
 html,body{background:var(--bg)}
-body{color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5}
-.wrap{max-width:680px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-button{font:inherit;cursor:pointer;border-radius:10px;color:inherit}
-button:focus-visible,input:focus-visible{outline:3px solid var(--accent-soft);outline-offset:1px}
+body{color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer;color:inherit;border-radius:12px}
+button:focus-visible,input:focus-visible{outline:3px solid color-mix(in srgb,var(--cover) 35%,transparent);outline-offset:2px}
 input{font:inherit;color:var(--ink)}
 .hidden{display:none!important}
-
-/* shapka */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:8px;padding-block:14px 10px}
+.wrap{max-width:720px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.pad{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
-.top h1{flex:1;min-width:0;margin:0;font-size:1.4rem;font-weight:800;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lang{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper);flex:none}
-.lang button{border:0;border-radius:0;background:none;color:var(--muted);padding:6px 11px;font-weight:700;font-size:.82rem}
-.lang button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-.iconbtn{border:0;background:var(--paper);width:42px;height:42px;display:grid;place-items:center;font-size:1.25rem;flex:none;border:1.5px solid var(--line)}
-.menu{position:absolute;right:0;top:calc(100% - 4px);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(22,25,31,.12);display:flex;flex-direction:column;min-width:200px;overflow:hidden}
-.menu button{border:0;border-radius:0;background:none;text-align:left;padding:12px 16px}
+
+/* ===== Bosh sahifa ===== */
+.hero{padding-block:22px 6px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.hero h1{margin:0;font-size:2rem;font-weight:800;letter-spacing:-.025em;line-height:1.1}
+.hero .today{color:var(--muted);font-size:.92rem;margin-top:4px}
+.lang{display:flex;background:#e9e6df;border-radius:12px;padding:3px;flex:none}
+.lang button{border:0;background:none;color:var(--muted);padding:5px 11px;font-weight:700;font-size:.8rem;border-radius:9px}
+.lang button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.stats{display:flex;gap:10px;padding-block:14px 4px;flex-wrap:wrap}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:8px 14px;font-size:.85rem;color:var(--muted)}
+.stat b{color:var(--ink);font-size:1.05rem;font-variant-numeric:tabular-nums;margin-right:4px}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;padding-block:14px 48px}
+.cover{position:relative;aspect-ratio:3/4;max-width:100%;border:0;border-radius:6px 16px 16px 6px;padding:16px 14px 14px 22px;text-align:left;
+  background:var(--c);color:#fff;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;
+  box-shadow:inset 8px 0 0 rgba(0,0,0,.14),0 2px 4px rgba(0,0,0,.08),0 10px 24px -8px color-mix(in srgb,var(--c) 60%,transparent);transition:transform .15s}
+.cover:active{transform:scale(.97)}
+.cover::after{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.1)}
+.cover .label{background:var(--paper);color:var(--ink);border-radius:8px;padding:8px 10px;font-weight:700;font-size:.98rem;line-height:1.25;overflow-wrap:anywhere;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;position:relative;z-index:1}
+.cover .meta{font-size:.78rem;opacity:.92;line-height:1.35;position:relative;z-index:1}
+.cover .meta b{font-size:1.5rem;display:block;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.newcover{aspect-ratio:3/4;max-width:100%;border:2px dashed #cbc6bb;border-radius:6px 16px 16px 6px;background:transparent;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-weight:700}
+.newcover .plus{width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:1.6rem;font-weight:500}
+.welcome{grid-column:1/-1;color:var(--muted);font-size:.95rem;padding:4px 2px}
+.status{color:var(--muted);font-size:.85rem}
+.status:empty{display:none}
+
+/* ===== Varaq (dialog) ===== */
+.sheetdlg{position:fixed;inset:0;z-index:20;background:rgba(27,29,34,.35);display:flex;align-items:flex-end;justify-content:center}
+.sheetdlg form,.sheetdlg .card{background:var(--paper);width:100%;max-width:520px;box-sizing:border-box;border-radius:22px 22px 0 0;
+  padding:20px max(18px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;animation:up .22s ease}
+@media (min-width:600px){.sheetdlg{align-items:center}.sheetdlg form,.sheetdlg .card{border-radius:22px}}
+@keyframes up{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+.sheetdlg h2{margin:0;font-size:1.2rem;font-weight:800}
+.sheetdlg input[type=text]{border:2px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--paper);font-size:1.05rem}
+.sheetdlg input[type=text]:focus{border-color:var(--cover);outline:none}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.sw{width:38px;height:38px;border-radius:50%;border:3px solid var(--paper);background:var(--c);box-shadow:0 0 0 2px transparent}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--c)}
+.btns{display:flex;gap:10px}
+.btn{flex:1;border:0;padding:13px;font-weight:800}
+.btn.main{background:var(--cover);color:var(--cover-ink)}
+.btn.soft{background:#efece6}
+.btn.warn{background:var(--danger);color:#fff}
+
+/* ===== Daftar ichi ===== */
+.band{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--cover);color:var(--cover-ink);border-radius:0 0 22px 22px;
+  padding-block:12px 16px;box-shadow:0 8px 20px -10px color-mix(in srgb,var(--cover) 70%,transparent)}
+.band .bar{display:flex;align-items:center;gap:8px}
+.band .ib{width:42px;height:42px;border:0;border-radius:12px;background:rgba(255,255,255,.18);color:inherit;display:grid;place-items:center;font-size:1.2rem;flex:none}
+.band h1{flex:1;min-width:0;margin:0;font-size:1.3rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.band .sub{font-size:.82rem;opacity:.9;margin:6px 0 10px 50px}
+.band .search{width:100%;box-sizing:border-box;border:0;border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.95)}
+.menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--paper);color:var(--ink);border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.18);display:flex;flex-direction:column;min-width:210px;overflow:hidden;z-index:6}
+.menu button{border:0;border-radius:0;background:none;text-align:left;padding:13px 16px}
 .menu button:hover{background:var(--bg)}
 .menu .danger{color:var(--danger)}
 
-/* bosh sahifa */
-.create{display:flex;gap:8px;background:var(--paper);border-radius:14px;padding:10px;box-shadow:0 1px 2px rgba(22,25,31,.06),0 6px 20px rgba(22,25,31,.06)}
-.create input{flex:1;min-width:0;border:2px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper)}
-.create input:focus{border-color:var(--accent);outline:none}
-.primary{background:var(--accent);color:var(--accent-ink);border:0;padding:10px 16px;font-weight:800;flex:none}
-.books{display:flex;flex-direction:column;gap:10px;padding-block:16px 40px}
-.book{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px}
-.book:hover{border-color:var(--accent)}
-.spine{width:42px;height:52px;border-radius:6px 10px 10px 6px;background:var(--accent-soft);border-left:6px solid var(--accent);flex:none;display:grid;place-items:center;font-weight:800;color:var(--accent);font-size:1.1rem}
-.book .info{flex:1;min-width:0}
-.book .name{font-weight:800;font-size:1.05rem;overflow-wrap:anywhere}
-.book .meta{color:var(--muted);font-size:.84rem}
-.chev{color:var(--muted);font-size:1.3rem}
-.empty{border:2px dashed var(--line);border-radius:14px;padding:24px 18px;text-align:center;color:var(--muted)}
-.status{color:var(--muted);font-size:.85rem;padding-top:8px}
-.status:empty{display:none}
-
-/* daftar ichi */
-.search{width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper)}
-.sheet{flex:1;padding-block:12px 16px;display:flex;flex-direction:column;gap:14px}
-.daybox{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
-.dayhead{padding:9px 14px;font-size:.76rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft)}
-.ln{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:start;padding:9px 6px 9px 14px;border-top:1px solid var(--rule)}
-.ln:first-of-type{border-top:0}
-.ln .time{font-family:var(--mono);font-size:.82rem;color:var(--muted);padding-top:3px;font-variant-numeric:tabular-nums}
-.ln .text{min-width:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.pages{flex:1;padding-block:16px 18px;display:flex;flex-direction:column;gap:18px}
+.page{background:var(--paper);border-radius:6px 14px 14px 6px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 18px -8px rgba(0,0,0,.12);overflow:hidden}
+.page .date{display:flex;align-items:baseline;gap:8px;padding:12px 14px 8px 76px;border-bottom:2px solid var(--rule)}
+.page .date b{font-size:1.05rem;font-weight:800;color:var(--cover)}
+.page .date span{font-size:.82rem;color:var(--muted)}
+.ln{display:grid;grid-template-columns:62px 1fr auto;border-bottom:1px solid var(--rule);min-height:44px}
+.ln:last-child{border-bottom:0}
+.ln .time{font-family:var(--mono);font-size:.8rem;color:#b25a5a;padding:12px 8px 0 12px;border-right:2px solid var(--margin);font-variant-numeric:tabular-nums}
+.ln .text{min-width:0;padding:10px 6px 10px 14px;white-space:pre-wrap;overflow-wrap:anywhere}
 .ln .edited{display:block;font-size:.72rem;color:var(--muted)}
-.ln .acts{display:flex}
-.ln .acts button{border:0;background:none;color:#a0a7b4;width:34px;height:30px;font-size:.95rem}
+.ln .acts{display:flex;align-items:flex-start;padding:6px 4px 0 0}
+.ln .acts button{border:0;background:none;color:#b6b2a8;width:34px;height:32px;border-radius:8px;font-size:.95rem}
 .ln .acts button:hover{color:var(--ink);background:var(--bg)}
 .ln .acts .del:hover{color:var(--danger)}
-.ln.editing{grid-template-columns:52px 1fr}
-.editin{width:100%;box-sizing:border-box;border:2px solid var(--accent);border-radius:8px;padding:6px 8px;background:var(--paper)}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.ghost{border:1.5px solid var(--line);background:var(--paper);padding:5px 12px;font-size:.88rem}
-.small{padding:5px 12px;font-size:.88rem}
-.yes{border:1.5px solid var(--danger);background:var(--paper);color:var(--danger);font-weight:700;padding:5px 12px;font-size:.88rem}
+.ln.editing{grid-template-columns:62px 1fr}
+.ln.editing form{padding:8px 10px 10px 12px}
+.editin{width:100%;box-sizing:border-box;border:2px solid var(--cover);border-radius:10px;padding:7px 10px;background:var(--paper)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.chip{border:0;padding:6px 14px;font-size:.88rem;font-weight:700;border-radius:999px}
+.chip.main{background:var(--cover);color:var(--cover-ink)}
+.chip.soft{background:#efece6}
+.chip.warn{background:#fde8df;color:var(--danger)}
+.blank{background:var(--paper);border-radius:6px 14px 14px 6px;padding:28px 20px 28px 76px;color:var(--muted);position:relative;
+  background-image:linear-gradient(to right,transparent 62px,var(--margin) 62px,var(--margin) 64px,transparent 64px)}
 
-.composer{position:sticky;bottom:0;background:var(--bg);padding-block:8px calc(12px + env(safe-area-inset-bottom,0px))}
-.composer .box{display:flex;gap:8px;background:var(--paper);border:2px solid var(--accent);border-radius:14px;padding:6px;box-shadow:0 -4px 20px rgba(22,25,31,.06)}
-.composer input{flex:1;min-width:0;border:0;background:transparent;padding:8px;outline:none;font-size:1.02rem}
-.composer .hint{font-size:.78rem;color:var(--muted);padding:6px 4px 0;font-family:var(--mono);font-variant-numeric:tabular-nums}
-.toast{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 16px;border-radius:999px;font-size:.88rem;font-weight:700;pointer-events:none;transition:opacity .2s}
-.dialog{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.dialog input{border:2px solid var(--accent);border-radius:10px;padding:9px 12px}
-@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+.composer{position:sticky;bottom:0;background:linear-gradient(to bottom,transparent,var(--bg) 30%);padding-block:14px calc(12px + env(safe-area-inset-bottom,0px))}
+.composer .box{display:flex;gap:8px;align-items:center;background:var(--paper);border-radius:18px;padding:6px 6px 6px 16px;box-shadow:0 2px 6px rgba(0,0,0,.06),0 10px 28px -10px rgba(0,0,0,.25)}
+.composer input{flex:1;min-width:0;border:0;background:transparent;padding:9px 0;outline:none;font-size:1.03rem}
+.composer .send{border:0;width:46px;height:46px;border-radius:14px;background:var(--cover);color:var(--cover-ink);font-size:1.25rem;display:grid;place-items:center;flex:none}
+.composer .hint{font-size:.76rem;color:var(--muted);padding:7px 6px 0;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;bottom:calc(118px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 16px;border-radius:999px;font-size:.88rem;font-weight:700;pointer-events:none;transition:opacity .2s;z-index:30}
+@media (prefers-reduced-motion:reduce){.toast,.cover{transition:none}.sheetdlg form,.sheetdlg .card{animation:none}}
 </style>
 
 <div class="wrap">
-  <!-- Bosh sahifa: daftarlar -->
-  <section id="home">
-    <div class="top">
-      <h1 data-i18n="booksTitle">Daftarlarim</h1>
+  <!-- Bosh sahifa -->
+  <section id="home" class="pad">
+    <div class="hero">
+      <div>
+        <h1 data-i18n="booksTitle">Daftarlarim</h1>
+        <div class="today" id="todayLbl"></div>
+      </div>
       <div class="lang" role="group" aria-label="Til / Язык">
         <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
         <button type="button" data-lang="ru" aria-pressed="false">RU</button>
       </div>
     </div>
-    <form class="create" id="createForm">
-      <input id="newBook" data-i18n-ph="newBookPh" placeholder="Yangi daftar nomi, masalan: Kabel hisoboti" autocomplete="off">
-      <button class="primary" type="submit" data-i18n="create">Yaratish</button>
-    </form>
+    <div class="stats" id="stats"></div>
     <div class="status" id="status"></div>
-    <div class="books" id="books"></div>
+    <div class="shelf" id="books"></div>
   </section>
 
   <!-- Daftar ichi -->
   <section id="bookView" class="hidden" style="display:flex;flex-direction:column;flex:1">
-    <div class="top" style="position:sticky">
-      <button class="iconbtn" id="back" type="button" data-i18n-aria="back" aria-label="Orqaga">←</button>
-      <h1 id="bookTitle"></h1>
-      <div style="position:relative">
-        <button class="iconbtn" id="moreBtn" type="button" aria-haspopup="true" data-i18n-aria="more" aria-label="Boshqa">⋯</button>
-        <div class="menu hidden" id="menu">
-          <button type="button" id="mRename" data-i18n="rename">Nomini o'zgartirish</button>
-          <button type="button" id="mDelete" class="danger" data-i18n="deleteBook">Daftarni o'chirish</button>
+    <div class="band pad">
+      <div class="bar">
+        <button class="ib" id="back" type="button" data-i18n-aria="back" aria-label="Orqaga">←</button>
+        <h1 id="bookTitle"></h1>
+        <div style="position:relative">
+          <button class="ib" id="moreBtn" type="button" aria-haspopup="true" data-i18n-aria="more" aria-label="Boshqa">⋯</button>
+          <div class="menu hidden" id="menu">
+            <button type="button" id="mRename" data-i18n="rename">Nomi va rangini o'zgartirish</button>
+            <button type="button" id="mDelete" class="danger" data-i18n="deleteBook">Daftarni o'chirish</button>
+          </div>
         </div>
       </div>
+      <div class="sub" id="bookSub"></div>
+      <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Shu daftardan qidirish…">
     </div>
-    <div id="bookDialog"></div>
-    <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Shu daftardan qidirish…">
-    <div class="sheet" id="sheet"></div>
-    <form class="composer" id="lineForm">
+    <div class="pages pad" id="sheet"></div>
+    <form class="composer pad" id="lineForm">
       <div class="box">
-        <input id="lineIn" data-i18n-ph="linePh" placeholder="Yozing va Enter bosing…" autocomplete="off" enterkeyhint="send">
-        <button class="primary" type="submit" data-i18n="add">Qo'shish</button>
+        <input id="lineIn" data-i18n-ph="linePh" placeholder="Yozing…" autocomplete="off" enterkeyhint="send">
+        <button class="send" type="submit" data-i18n-aria="add" aria-label="Qo'shish">↑</button>
       </div>
       <div class="hint" id="nowHint"></div>
     </form>
   </section>
 </div>
+<div id="dlg"></div>
 <div class="toast" id="toast" style="opacity:0"></div>
 
 <script>
 const I18N={
-uz:{booksTitle:"Daftarlarim",newBookPh:"Yangi daftar nomi, masalan: Kabel hisoboti",create:"Yaratish",back:"Orqaga",more:"Boshqa",
- rename:"Nomini o'zgartirish",deleteBook:"Daftarni o'chirish",search:"Shu daftardan qidirish…",linePh:"Yozing va Enter bosing…",add:"Qo'shish",
- willSave:"Vaqt avtomatik yoziladi:",added:"Qo'shildi ✓",created:"Daftar yaratildi",
+uz:{booksTitle:"Daftarlarim",back:"Orqaga",more:"Boshqa",rename:"Nomi va rangini o'zgartirish",deleteBook:"Daftarni o'chirish",
+ search:"Shu daftardan qidirish…",linePh:"Yozing…",add:"Qo'shish",willSave:"Vaqt o'zi yoziladi:",added:"Qo'shildi ✓",created:"Daftar yaratildi",
  months:["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentabr","Oktabr","Noyabr","Dekabr"],
  monthsShort:["Yan","Fev","Mar","Apr","May","Iyun","Iyul","Avg","Sen","Okt","Noy","Dek"],
  days:["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"],
- today:"Bugun",yesterday:"Kecha",noBooks:"Hali daftar yo'q. Tepaga nom yozib «Yaratish» ni bosing. Masalan: «Kabel hisoboti».",
- noLines:"Daftar bo'sh. Pastdagi qatorga yozing va «Qo'shish» ni bosing — sana va vaqt o'zi yoziladi.",noFound:"Bu so'z bo'yicha hech narsa topilmadi.",
- count:n=>`${n} ta yozuv`,last:"oxirgi:",emptyBook:"bo'sh",edit:"Tahrirlash",del:"O'chirish",save:"Saqlash",cancel:"Bekor qilish",no:"Yo'q",
- edited:"tahrirlandi:",confirmDelBook:n=>`«${n}» daftari va undagi barcha yozuvlar o'chiriladi.`,newName:"Yangi nom",
+ today:"Bugun",yesterday:"Kecha",welcome:"Daftar yarating, masalan «Kabel hisoboti». Unga yozgan har bir qatoringiz sana va vaqti bilan saqlanadi.",
+ noLines:"Daftar bo'sh. Pastga yozing — sana va vaqt o'zi qo'yiladi.",noFound:"Bu so'z bo'yicha hech narsa topilmadi.",
+ count:n=>`${n} ta yozuv`,entries:"yozuv",last:"oxirgi:",emptyBook:"hali bo'sh",edit:"Tahrirlash",del:"O'chirish",save:"Saqlash",cancel:"Bekor qilish",
+ edited:"tahrirlandi:",confirmDelBook:n=>`«${n}» daftari va undagi barcha yozuvlar o'chiriladi. Buni qaytarib bo'lmaydi.`,
+ newBook:"Yangi daftar",newBookPh:"Nomi, masalan: Kabel hisoboti",color:"Muqova rangi",create:"Yaratish",editBook:"Daftarni o'zgartirish",
+ statBooks:"daftar",statToday:"bugungi yozuv",
  err:"Saqlab bo'lmadi: internetni tekshirib, qayta urinib ko'ring.",loading:"Yuklanmoqda…",slow:"Ma'lumotlar hali yuklanmadi, internetni tekshiring.",
  loadErr:"Ma'lumotlarni yuklab bo'lmadi. Sahifani keyinroq oching.",oldNotes:"Zametkalar"},
-ru:{booksTitle:"Мои тетради",newBookPh:"Название новой тетради, например: Отчёт по кабелю",create:"Создать",back:"Назад",more:"Ещё",
- rename:"Переименовать",deleteBook:"Удалить тетрадь",search:"Поиск в этой тетради…",linePh:"Пишите и нажмите Enter…",add:"Добавить",
- willSave:"Время запишется автоматически:",added:"Добавлено ✓",created:"Тетрадь создана",
+ru:{booksTitle:"Мои тетради",back:"Назад",more:"Ещё",rename:"Название и цвет",deleteBook:"Удалить тетрадь",
+ search:"Поиск в этой тетради…",linePh:"Пишите…",add:"Добавить",willSave:"Время запишется само:",added:"Добавлено ✓",created:"Тетрадь создана",
  months:["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"],
  monthsShort:["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"],
  days:["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
- today:"Сегодня",yesterday:"Вчера",noBooks:"Тетрадей пока нет. Введите название вверху и нажмите «Создать». Например: «Отчёт по кабелю».",
- noLines:"Тетрадь пуста. Напишите в строке внизу и нажмите «Добавить» — дата и время запишутся сами.",noFound:"По этому запросу ничего не найдено.",
+ today:"Сегодня",yesterday:"Вчера",welcome:"Создайте тетрадь, например «Отчёт по кабелю». Каждая строка в ней сохранится с датой и временем.",
+ noLines:"Тетрадь пуста. Пишите внизу — дата и время поставятся сами.",noFound:"По этому запросу ничего не найдено.",
  count:n=>{const a=n%10,b=n%100;const w=a===1&&b!==11?"запись":a>=2&&a<=4&&(b<12||b>14)?"записи":"записей";return `${n} ${w}`},
- last:"последняя:",emptyBook:"пусто",edit:"Редактировать",del:"Удалить",save:"Сохранить",cancel:"Отмена",no:"Нет",
- edited:"изменено:",confirmDelBook:n=>`Тетрадь «${n}» и все записи в ней будут удалены.`,newName:"Новое название",
+ entries:"записей",last:"последняя:",emptyBook:"пока пусто",edit:"Редактировать",del:"Удалить",save:"Сохранить",cancel:"Отмена",
+ edited:"изменено:",confirmDelBook:n=>`Тетрадь «${n}» и все записи в ней будут удалены. Это нельзя отменить.`,
+ newBook:"Новая тетрадь",newBookPh:"Название, например: Отчёт по кабелю",color:"Цвет обложки",create:"Создать",editBook:"Изменить тетрадь",
+ statBooks:"тетр.",statToday:"записей сегодня",
  err:"Не удалось сохранить: проверьте интернет и попробуйте снова.",loading:"Загрузка…",slow:"Данные ещё не загрузились, проверьте интернет.",
  loadErr:"Не удалось загрузить данные. Откройте страницу позже.",oldNotes:"Заметки"}
 };
+const COLORS=["#2563eb","#0f766e","#c2410c","#7c3aed","#be123c","#4d7c0f"];
 let lang="uz";
 try{const s=localStorage.getItem("zametka-lang");lang=I18N[s]?s:(navigator.language||"").toLowerCase().startsWith("ru")?"ru":"uz"}catch(e){}
 const T=k=>I18N[lang][k];
@@ -175,12 +214,8 @@ const hm=ts=>{const d=new Date(ts);return `${pad(d.getHours())}:${pad(d.getMinut
 const fmt=ts=>{const d=new Date(ts);return `${d.getDate()} ${T("monthsShort")[d.getMonth()]}, ${hm(ts)}`};
 const newId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!=null)x.textContent=text;return x};
-function dayLabel(d){
-  const now=new Date(),y=new Date(now);y.setDate(now.getDate()-1);
-  const same=(a,b)=>a.toDateString()===b.toDateString();
-  const base=`${d.getDate()} ${T("months")[d.getMonth()]}${d.getFullYear()!==now.getFullYear()?" "+d.getFullYear():""}, ${T("days")[d.getDay()]}`;
-  return same(d,now)?T("today")+" — "+base:same(d,y)?T("yesterday")+" — "+base:base;
-}
+const colorOf=b=>COLORS.includes(b&&b.color)?b.color:COLORS[[...(b&&b.id||"x")].reduce((a,c)=>a+c.charCodeAt(0),0)%COLORS.length];
+const sameDay=(a,b)=>new Date(a).toDateString()===new Date(b).toDateString();
 let toastT=null;
 function toast(msg){const t=$("toast");t.textContent=msg;t.style.opacity="1";clearTimeout(toastT);toastT=setTimeout(()=>{t.style.opacity="0"},1600)}
 let statusKey=null;
@@ -207,15 +242,15 @@ const linesCol=bid=>db.collection(`data/users/${uid}/${bid}/lines`);
 
 function refreshLocal(){const s=L();books=s.books;if(cur)lines=s.lines[cur]||[];render()}
 
-async function createBook(title){
-  const b={id:newId("b"),title,at:Date.now(),updated:Date.now(),count:0};
+async function createBook(title,color){
+  const b={id:newId("b"),title,color,at:Date.now(),updated:Date.now(),count:0};
   if(mode==="db"){const {id,...data}=b;try{await booksCol().doc(id).set(data)}catch(e){toast(T("err"));return null}}
   else{const s=L();s.books.push(b);Lsave(s);refreshLocal()}
   return b.id;
 }
-async function renameBook(id,title){
-  if(mode==="db"){try{await booksCol().doc(id).update({title})}catch(e){toast(T("err"))}}
-  else{const s=L(),b=s.books.find(x=>x.id===id);if(b)b.title=title;Lsave(s);refreshLocal()}
+async function renameBook(id,title,color){
+  if(mode==="db"){try{await booksCol().doc(id).update({title,color})}catch(e){toast(T("err"))}}
+  else{const s=L(),b=s.books.find(x=>x.id===id);if(b){b.title=title;b.color=color}Lsave(s);refreshLocal()}
 }
 async function deleteBook(id){
   if(mode==="db"){
@@ -253,15 +288,17 @@ function watchLines(bid){
   }else lines=L().lines[bid]||[];
 }
 
+
 /* ---------- Ko'rinish ---------- */
-let editingId=null, editDraft="", pendingDel=null, dialog=null, stickBottom=true;
+let editingId=null, editDraft="", pendingDel=null, stickBottom=true;
 
 function route(){
   const m=location.hash.match(/^#d-([A-Za-z0-9]+)$/);
   const id=m?m[1]:null;
-  if(id!==cur){cur=id;editingId=null;pendingDel=null;dialog=null;$("q").value="";$("menu").classList.add("hidden");if(cur){watchLines(cur);stickBottom=true}else if(unsubLines){unsubLines();unsubLines=null}}
+  if(id!==cur){cur=id;editingId=null;pendingDel=null;closeDlg();$("q").value="";$("menu").classList.add("hidden");
+    if(cur){watchLines(cur);stickBottom=true}else if(unsubLines){unsubLines();unsubLines=null}}
   render();
-  if(cur)setTimeout(()=>{window.scrollTo(0,document.body.scrollHeight)},0);
+  if(cur)setTimeout(()=>{window.scrollTo(0,document.body.scrollHeight)},0);else window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",route);
 
@@ -269,52 +306,96 @@ function render(){
   const b=cur&&books.find(x=>x.id===cur);
   $("home").classList.toggle("hidden",!!b);
   $("bookView").classList.toggle("hidden",!b);
+  document.documentElement.style.setProperty("--cover",b?colorOf(b):COLORS[0]);
   if(b)renderBook();else renderHome();
 }
+
 function renderHome(){
+  const d=new Date();
+  $("todayLbl").textContent=`${T("today")}: ${d.getDate()} ${T("months")[d.getMonth()]}, ${T("days")[d.getDay()]}`;
+  const st=$("stats");st.textContent="";
+  if(books.length){
+    const s1=el("div","stat");s1.append(el("b",null,books.length),T("statBooks"));st.append(s1);
+    const total=books.reduce((a,b)=>a+(b.count||0),0);
+    const s2=el("div","stat");s2.append(el("b",null,total),T("entries"));st.append(s2);
+  }
   const box=$("books");box.textContent="";
-  if(!books.length){box.append(el("div","empty",T("noBooks")));return}
+  const nb=el("button","newcover");nb.type="button";nb.append(el("span","plus","+"),el("span",null,T("newBook")));
+  nb.onclick=()=>openBookDlg(null);
   for(const b of [...books].sort((a,c)=>(c.updated||c.at)-(a.updated||a.at))){
-    const btn=el("button","book");btn.type="button";
-    const sp=el("div","spine",(b.title||"?").trim().charAt(0).toUpperCase());
-    const info=el("div","info");info.append(el("div","name",b.title));
-    info.append(el("div","meta",b.count?`${T("count")(b.count)} · ${T("last")} ${fmt(b.updated||b.at)}`:T("emptyBook")));
-    btn.append(sp,info,el("span","chev","›"));
+    const btn=el("button","cover");btn.type="button";btn.style.setProperty("--c",colorOf(b));
+    btn.append(el("div","label",b.title));
+    const meta=el("div","meta");
+    if(b.count){meta.append(el("b",null,b.count),`${T("entries")} · ${T("last")} ${fmt(b.updated||b.at)}`)}
+    else meta.append(T("emptyBook"));
+    btn.append(meta);
     btn.onclick=()=>{location.hash="d-"+b.id};
     box.append(btn);
   }
+  box.append(nb);
+  if(!books.length)box.append(el("div","welcome",T("welcome")));
 }
+
+/* pastdan chiqadigan varaq: daftar yaratish / o'zgartirish / o'chirish */
+function closeDlg(){$("dlg").textContent=""}
+function openBookDlg(b){
+  closeDlg();
+  let color=b?colorOf(b):COLORS[books.length%COLORS.length];
+  const wrap=el("div","sheetdlg");wrap.onclick=e=>{if(e.target===wrap)closeDlg()};
+  const f=el("form");f.style.setProperty("--cover",color);
+  f.append(el("h2",null,b?T("editBook"):T("newBook")));
+  const inp=el("input");inp.type="text";inp.id="bookName";inp.placeholder=T("newBookPh");inp.value=b?b.title:"";inp.setAttribute("aria-label",T("newBookPh"));inp.autocomplete="off";
+  const lbl=el("div","status",T("color"));
+  const sws=el("div","swatches");
+  const paint=()=>{f.style.setProperty("--cover",color);sws.querySelectorAll(".sw").forEach(s=>s.setAttribute("aria-pressed",String(s.dataset.c===color)))};
+  for(const c of COLORS){const s=el("button","sw");s.type="button";s.dataset.c=c;s.style.setProperty("--c",c);s.setAttribute("aria-label",c);s.onclick=()=>{color=c;paint()};sws.append(s)}
+  const btns=el("div","btns");
+  const ok=el("button","btn main",b?T("save"):T("create"));ok.type="submit";
+  const no=el("button","btn soft",T("cancel"));no.type="button";no.onclick=closeDlg;
+  btns.append(no,ok);
+  f.append(inp,lbl,sws,btns);
+  f.onsubmit=async e=>{e.preventDefault();const v=inp.value.trim();if(!v){inp.focus();return}closeDlg();
+    if(b){await renameBook(b.id,v,color);render()}
+    else{const id=await createBook(v,color);if(id){toast(T("created"));location.hash="d-"+id}}};
+  wrap.append(f);$("dlg").append(wrap);paint();
+  setTimeout(()=>inp.focus(),50);
+}
+function openDeleteDlg(b){
+  closeDlg();
+  const wrap=el("div","sheetdlg");wrap.onclick=e=>{if(e.target===wrap)closeDlg()};
+  const c=el("div","card");
+  c.append(el("h2",null,T("deleteBook")),el("div",null,T("confirmDelBook")(b.title)));
+  const btns=el("div","btns");
+  const no=el("button","btn soft",T("cancel"));no.type="button";no.onclick=closeDlg;
+  const y=el("button","btn warn",T("del"));y.type="button";y.onclick=async()=>{closeDlg();const id=b.id;location.hash="";await deleteBook(id)};
+  btns.append(no,y);c.append(btns);wrap.append(c);$("dlg").append(wrap);
+}
+
 function renderBook(fromSnap){
   const b=books.find(x=>x.id===cur);if(!b)return;
   $("bookTitle").textContent=b.title;
-  const dl=$("bookDialog");dl.textContent="";
-  if(dialog==="rename"){
-    const d=el("form","dialog");const inp=el("input");inp.id="renameIn";inp.value=b.title;inp.setAttribute("aria-label",T("newName"));
-    const r=el("div","row");const ok=el("button","primary small",T("save"));ok.type="submit";const no=el("button","ghost",T("cancel"));no.type="button";
-    no.onclick=()=>{dialog=null;render()};
-    d.onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(v){renameBook(b.id,v)}dialog=null;render()};
-    r.append(ok,no);d.append(inp,r);dl.append(d);setTimeout(()=>inp.focus());
-  }else if(dialog==="delete"){
-    const d=el("div","dialog");d.append(el("div",null,T("confirmDelBook")(b.title)));
-    const r=el("div","row");const y=el("button","yes",T("deleteBook"));const no=el("button","ghost",T("no"));
-    y.onclick=async()=>{dialog=null;const id=b.id;location.hash="";await deleteBook(id)};
-    no.onclick=()=>{dialog=null;render()};
-    r.append(y,no);d.append(r);dl.append(d);
-  }
+  const n=lines.length;
+  $("bookSub").textContent=n?`${T("count")(n)} · ${T("last")} ${fmt(Math.max(...lines.map(l=>l.at)))}`:T("emptyBook");
   const q=$("q").value.trim().toLowerCase();
   const list=lines.filter(l=>!q||l.text.toLowerCase().includes(q)).sort((a,c)=>a.at-c.at||(a.id<c.id?-1:1));
   const sh=$("sheet");sh.textContent="";
-  if(!list.length){sh.append(el("div","empty",q?T("noFound"):T("noLines")));return}
+  if(!list.length){sh.append(el("div","blank",q?T("noFound"):T("noLines")));return}
   const groups=new Map();
   for(const l of list){const d=new Date(l.at),k=d.toDateString();if(!groups.has(k))groups.set(k,{d,items:[]});groups.get(k).items.push(l)}
+  const now=Date.now(),yest=now-864e5;
   for(const {d,items} of groups.values()){
-    const box=el("div","daybox");box.append(el("div","dayhead",dayLabel(d)));
+    const page=el("div","page");
+    const head=el("div","date");
+    const rel=sameDay(d,now)?T("today"):sameDay(d,yest)?T("yesterday"):null;
+    head.append(el("b",null,`${d.getDate()} ${T("months")[d.getMonth()]}${d.getFullYear()!==new Date().getFullYear()?" "+d.getFullYear():""}`),
+                el("span",null,(rel?rel+" · ":"")+T("days")[d.getDay()]));
+    page.append(head);
     for(const l of items){
       const row=el("div","ln");row.append(el("div","time",hm(l.at)));
       if(editingId===l.id){
         row.classList.add("editing");
-        const w=el("form");const inp=el("input","editin");inp.id="edit-"+l.id;inp.value=editDraft;inp.oninput=()=>{editDraft=inp.value};
-        const r=el("div","row");const ok=el("button","primary small",T("save"));ok.type="submit";const no=el("button","ghost",T("cancel"));no.type="button";
+        const w=el("form");const inp=el("input","editin");inp.id="edit-"+l.id;inp.value=editDraft;inp.oninput=()=>{editDraft=inp.value};inp.setAttribute("aria-label",T("edit"));
+        const r=el("div","row");const ok=el("button","chip main",T("save"));ok.type="submit";const no=el("button","chip soft",T("cancel"));no.type="button";
         no.onclick=()=>{editingId=null;render()};
         inp.onkeydown=e=>{if(e.key==="Escape")no.click()};
         w.onsubmit=e=>{e.preventDefault();const v=editDraft.trim();editingId=null;if(v&&v!==l.text)editLine(cur,l.id,v);render()};
@@ -325,9 +406,10 @@ function renderBook(fromSnap){
         row.append(tx);
         const a=el("div","acts");
         if(pendingDel===l.id){
-          const y=el("button","yes",T("del"));y.style.width="auto";y.onclick=()=>{pendingDel=null;deleteLine(cur,l.id)};
-          const no=el("button","ghost",T("no"));no.style.width="auto";no.onclick=()=>{pendingDel=null;render()};
-          a.style.gap="6px";a.append(y,no);
+          a.style.gap="6px";a.style.padding="6px 8px";a.style.flexWrap="wrap";
+          const y=el("button","chip warn",T("del"));y.style.width="auto";y.style.height="auto";y.onclick=()=>{pendingDel=null;deleteLine(cur,l.id)};
+          const no=el("button","chip soft",T("cancel"));no.style.width="auto";no.style.height="auto";no.onclick=()=>{pendingDel=null;render()};
+          a.append(y,no);
         }else{
           const ed=el("button",null,"✎");ed.type="button";ed.title=T("edit");ed.setAttribute("aria-label",T("edit"));
           ed.onclick=()=>{editingId=l.id;editDraft=l.text;pendingDel=null;render()};
@@ -337,9 +419,9 @@ function renderBook(fromSnap){
         }
         row.append(a);
       }
-      box.append(row);
+      page.append(row);
     }
-    sh.append(box);
+    sh.append(page);
   }
   if(fromSnap&&stickBottom)window.scrollTo(0,document.body.scrollHeight);
 }
@@ -358,8 +440,6 @@ function applyLang(){
 }
 document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;try{localStorage.setItem("zametka-lang",lang)}catch(e){}applyLang()}));
 
-$("createForm").addEventListener("submit",async e=>{e.preventDefault();const v=$("newBook").value.trim();if(!v){$("newBook").focus();return}
-  $("newBook").value="";const id=await createBook(v);if(id){toast(T("created"));location.hash="d-"+id}});
 $("lineForm").addEventListener("submit",async e=>{e.preventDefault();const raw=$("lineIn").value;
   const texts=raw.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);if(!texts.length||!cur){$("lineIn").focus();return}
   $("lineIn").value="";stickBottom=true;$("q").value="";
@@ -369,8 +449,9 @@ $("lineIn").addEventListener("paste",e=>{const t=(e.clipboardData||window.clipbo
 $("back").onclick=()=>{location.hash=""};
 $("moreBtn").onclick=e=>{e.stopPropagation();$("menu").classList.toggle("hidden")};
 document.addEventListener("click",()=>$("menu").classList.add("hidden"));
-$("mRename").onclick=()=>{dialog="rename";render()};
-$("mDelete").onclick=()=>{dialog="delete";render()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDlg()});
+$("mRename").onclick=()=>{const b=books.find(x=>x.id===cur);if(b)openBookDlg(b)};
+$("mDelete").onclick=()=>{const b=books.find(x=>x.id===cur);if(b)openDeleteDlg(b)};
 $("q").addEventListener("input",()=>{stickBottom=false;renderBook()});
 window.addEventListener("scroll",()=>{stickBottom=window.innerHeight+window.scrollY>=document.body.scrollHeight-80},{passive:true});
 

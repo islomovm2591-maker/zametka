@@ -1,5 +1,5 @@
 // Oflayn rejim: ilova fayllarini telefonda saqlab qo'yadi
-const CACHE = "daftarlar-v1";
+const CACHE = "daftarlar-v2";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
