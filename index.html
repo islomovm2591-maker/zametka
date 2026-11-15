@@ -87,53 +87,100 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px soli
   .actions,.confirm{grid-column:3;grid-row:1/3}
   .editbox{grid-column:2/4}
 }
+.hdr-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.lang{display:flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.lang button{border:0;border-radius:0;background:none;color:var(--muted);padding:4px 10px;font-weight:700;font-size:.8rem;letter-spacing:.04em}
+.lang button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 </style>
 
 <div class="wrap">
   <header>
-    <h1>Zametkalarim</h1>
-    <div class="clock" id="clock"></div>
+    <h1 data-i18n="title">Zametkalarim</h1>
+    <div class="hdr-right">
+      <div class="clock" id="clock"></div>
+      <div class="lang" role="group" aria-label="Til / Язык">
+        <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
+        <button type="button" data-lang="ru" aria-pressed="false">RU</button>
+      </div>
+    </div>
   </header>
 
   <div id="alerts" aria-live="assertive"></div>
 
   <form id="f">
-    <textarea id="text" placeholder="Nima yozmoqchisiz? Masalan: Ertaga soat 10:00 da uchrashuv"></textarea>
+    <textarea id="text" data-i18n-ph="placeholder" placeholder="Nima yozmoqchisiz? Masalan: Ertaga soat 10:00 da uchrashuv"></textarea>
     <div class="remindrow">
-      <label for="remind">Eslatma (ixtiyoriy):</label>
+      <label for="remind" data-i18n="remindLabel">Eslatma (ixtiyoriy):</label>
       <input type="datetime-local" id="remind">
-      <button type="button" class="ghost" id="clearRemind" hidden>Olib tashlash</button>
+      <button type="button" class="ghost" id="clearRemind" data-i18n="remove" hidden>Olib tashlash</button>
     </div>
     <div class="row">
-      <span class="hint">Saqlanganda kun, oy, soat va daqiqa avtomatik yoziladi · Ctrl+Enter</span>
-      <button class="save" id="save" type="submit" disabled>Saqlash</button>
+      <span class="hint" data-i18n="hint">Saqlanganda kun, oy, soat va daqiqa avtomatik yoziladi · Ctrl+Enter</span>
+      <button class="save" id="save" type="submit" data-i18n="save" disabled>Saqlash</button>
     </div>
   </form>
 
-  <input class="search" id="q" type="search" placeholder="Zametkalardan qidirish…">
-  <div class="status" id="status">Yuklanmoqda…</div>
+  <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Zametkalardan qidirish…">
+  <div class="status" id="status"></div>
   <div id="out"></div>
 </div>
 
 <script>
-const OYLAR=["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentabr","Oktabr","Noyabr","Dekabr"];
-const OY_QISQA=["Yan","Fev","Mar","Apr","May","Iyun","Iyul","Avg","Sen","Okt","Noy","Dek"];
-const KUNLAR=["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"];
+const I18N={
+uz:{title:"Zametkalarim",placeholder:"Nima yozmoqchisiz? Masalan: Ertaga soat 10:00 da uchrashuv",remindLabel:"Eslatma (ixtiyoriy):",remove:"Olib tashlash",
+ hint:"Saqlanganda kun, oy, soat va daqiqa avtomatik yoziladi · Ctrl+Enter",save:"Saqlash",search:"Zametkalardan qidirish…",loading:"Yuklanmoqda…",
+ months:["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentabr","Oktabr","Noyabr","Dekabr"],
+ monthsShort:["Yan","Fev","Mar","Apr","May","Iyun","Iyul","Avg","Sen","Okt","Noy","Dek"],
+ days:["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"],
+ today:"Bugun",yesterday:"Kecha",emptySearch:"Bu so'z bo'yicha zametka topilmadi.",empty:"Hali zametka yo'q. Yuqoriga birinchi zametkangizni yozing va «Saqlash» ni bosing.",
+ editAria:"Zametkani tahrirlash",cancel:"Bekor qilish",past:"Eslatma vaqti o'tib ketgan. Kelajakdagi vaqtni tanlang.",remindShort:"Eslatma:",reminded:"Eslatildi:",edited:"tahrirlandi:",
+ del:"O'chirish",no:"Yo'q",edit:"Tahrirlash",saveErr:"Saqlab bo'lmadi: internetni tekshirib, qayta urinib ko'ring.",updErr:"O'zgarishni saqlab bo'lmadi, qayta urinib ko'ring.",
+ delErr:"O'chirib bo'lmadi, qayta urinib ko'ring.",missed:"O'tkazib yuborilgan eslatma",alert:"Eslatma",close:"Yopish",local:"Zametkalar shu brauzerda saqlanadi.",
+ signin:"Hisobingizga kiring — shunda zametkalar har qanday qurilmada saqlanib qoladi. Hozircha shu brauzerda saqlanadi.",slow:"Ma'lumotlar hali yuklanmadi, internetni tekshiring.",
+ loadErr:"Zametkalarni yuklab bo'lmadi. Sahifani keyinroq oching.",count:n=>`${n} ta zametka`},
+ru:{title:"Мои заметки",placeholder:"Что хотите записать? Например: Завтра в 10:00 встреча",remindLabel:"Напоминание (необязательно):",remove:"Убрать",
+ hint:"При сохранении день, месяц, час и минута записываются автоматически · Ctrl+Enter",save:"Сохранить",search:"Поиск по заметкам…",loading:"Загрузка…",
+ months:["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"],
+ monthsShort:["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"],
+ days:["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+ today:"Сегодня",yesterday:"Вчера",emptySearch:"По этому запросу заметок не найдено.",empty:"Заметок пока нет. Напишите первую заметку вверху и нажмите «Сохранить».",
+ editAria:"Редактировать заметку",cancel:"Отмена",past:"Время напоминания уже прошло. Выберите время в будущем.",remindShort:"Напоминание:",reminded:"Напомнено:",edited:"изменено:",
+ del:"Удалить",no:"Нет",edit:"Редактировать",saveErr:"Не удалось сохранить: проверьте интернет и попробуйте снова.",updErr:"Не удалось сохранить изменения, попробуйте снова.",
+ delErr:"Не удалось удалить, попробуйте снова.",missed:"Пропущенное напоминание",alert:"Напоминание",close:"Закрыть",local:"Заметки сохраняются в этом браузере.",
+ signin:"Войдите в аккаунт — тогда заметки сохранятся на любом устройстве. Пока они хранятся в этом браузере.",slow:"Данные ещё не загрузились, проверьте интернет.",
+ loadErr:"Не удалось загрузить заметки. Откройте страницу позже.",
+ count:n=>{const a=n%10,b=n%100;const w=a===1&&b!==11?"заметка":a>=2&&a<=4&&(b<12||b>14)?"заметки":"заметок";return `${n} ${w}`}}
+};
+let lang="uz";
+try{const s=localStorage.getItem("zametka-lang");lang=I18N[s]?s:(navigator.language||"").toLowerCase().startsWith("ru")?"ru":"uz"}catch(e){}
+const T=k=>I18N[lang][k];
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,"0");
-let notes=[], col=null, pending=null, mode="local", editing=null, draft="", draftRemind="", focusEdit=false;
+let notes=[], col=null, pending=null, mode="local", editing=null, draft="", draftRemind="", focusEdit=false, statusKey=null;
 const toInput=ts=>{const d=new Date(ts);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`};
 const toTs=v=>{if(!v)return null;const t=new Date(v).getTime();return isNaN(t)?null:t};
-const fmt=ts=>{const d=new Date(ts);return `${d.getDate()} ${OY_QISQA[d.getMonth()]}, ${pad(d.getHours())}:${pad(d.getMinutes())}`};
+const fmt=ts=>{const d=new Date(ts);return `${d.getDate()} ${T("monthsShort")[d.getMonth()]}, ${pad(d.getHours())}:${pad(d.getMinutes())}`};
+function setStatus(k){statusKey=k;showStatus()}
+function showStatus(){$("status").textContent=!statusKey?"":statusKey==="count"?(notes.length?T("count")(notes.length):""):T(statusKey)}
 
-function tick(){const d=new Date();$("clock").textContent=`${d.getDate()} ${OYLAR[d.getMonth()]} ${d.getFullYear()}, ${KUNLAR[d.getDay()]} · ${pad(d.getHours())}:${pad(d.getMinutes())}`}
-tick();setInterval(tick,15000);
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=T(el.dataset.i18n)});
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{el.placeholder=T(el.dataset.i18nPh)});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
+  if(!$("alerts").children.length)document.title=T("title");
+  tick();showStatus();render();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;try{localStorage.setItem("zametka-lang",lang)}catch(e){}applyLang()}));
+
+function tick(){const d=new Date();$("clock").textContent=`${d.getDate()} ${T("months")[d.getMonth()]} ${d.getFullYear()}, ${T("days")[d.getDay()]} · ${pad(d.getHours())}:${pad(d.getMinutes())}`}
+setInterval(tick,15000);
 
 function dayLabel(d){
   const now=new Date(), y=new Date(now); y.setDate(now.getDate()-1);
   const same=(a,b)=>a.toDateString()===b.toDateString();
-  const base=`${d.getDate()} ${OYLAR[d.getMonth()]}${d.getFullYear()!==now.getFullYear()?" "+d.getFullYear():""}, ${KUNLAR[d.getDay()]}`;
-  return same(d,now)?"Bugun — "+base:same(d,y)?"Kecha — "+base:base;
+  const base=`${d.getDate()} ${T("months")[d.getMonth()]}${d.getFullYear()!==now.getFullYear()?" "+d.getFullYear():""}, ${T("days")[d.getDay()]}`;
+  return same(d,now)?T("today")+" — "+base:same(d,y)?T("yesterday")+" — "+base:base;
 }
 
 function render(){
@@ -142,7 +189,7 @@ function render(){
   const out=$("out"); out.textContent="";
   if(!list.length){
     const e=document.createElement("div"); e.className="empty";
-    e.textContent=q?"Bu so'z bo'yicha zametka topilmadi.":"Hali zametka yo'q. Yuqoriga birinchi zametkangizni yozing va «Saqlash» ni bosing.";
+    e.textContent=q?T("emptySearch"):T("empty");
     out.append(e); return;
   }
   const groups=new Map();
@@ -155,20 +202,20 @@ function render(){
       const t=new Date(n.at), time=`${pad(t.getHours())}:${pad(t.getMinutes())}`;
       const row=document.createElement("div"); row.className="note";
       const c=(cls,txt)=>{const x=document.createElement("div");x.className="cell "+cls;x.textContent=txt;return x};
-      const m=c("m",OY_QISQA[t.getMonth()]); m.dataset.time=time;
+      const m=c("m",T("monthsShort")[t.getMonth()]); m.dataset.time=time;
       let txt;
       if(editing===n.id){
         txt=document.createElement("div"); txt.className="cell txt editbox";
-        const ta=document.createElement("textarea"); ta.id="edit-"+n.id; ta.value=draft; ta.setAttribute("aria-label","Zametkani tahrirlash");
+        const ta=document.createElement("textarea"); ta.id="edit-"+n.id; ta.value=draft; ta.setAttribute("aria-label",T("editAria"));
         ta.oninput=()=>{draft=ta.value};
         const bar=document.createElement("div"); bar.className="editbar";
-        const ok=document.createElement("button"); ok.className="save"; ok.textContent="Saqlash";
-        const no=document.createElement("button"); no.className="ghost"; no.textContent="Bekor qilish";
-        ok.onclick=()=>{const v=draft.trim(); if(!v)return; const r=toTs(draftRemind); if(r&&r!==n.remindAt&&r<=Date.now()){$("status").textContent="Eslatma vaqti o'tib ketgan. Kelajakdagi vaqtni tanlang.";return} update(n.id,v,r)};
+        const ok=document.createElement("button"); ok.className="save"; ok.textContent=T("save");
+        const no=document.createElement("button"); no.className="ghost"; no.textContent=T("cancel");
+        ok.onclick=()=>{const v=draft.trim(); if(!v)return; const r=toTs(draftRemind); if(r&&r!==n.remindAt&&r<=Date.now()){setStatus("past");return} update(n.id,v,r)};
         const rr=document.createElement("div"); rr.className="remindrow";
-        const rl=document.createElement("label"); rl.textContent="Eslatma:"; rl.htmlFor="er-"+n.id;
+        const rl=document.createElement("label"); rl.textContent=T("remindShort"); rl.htmlFor="er-"+n.id;
         const ri=document.createElement("input"); ri.type="datetime-local"; ri.id="er-"+n.id; ri.value=draftRemind; ri.oninput=()=>{draftRemind=ri.value};
-        const rc=document.createElement("button"); rc.type="button"; rc.className="ghost"; rc.textContent="Olib tashlash"; rc.onclick=()=>{draftRemind="";ri.value=""};
+        const rc=document.createElement("button"); rc.type="button"; rc.className="ghost"; rc.textContent=T("remove"); rc.onclick=()=>{draftRemind="";ri.value=""};
         rr.append(rl,ri,rc);
         no.onclick=()=>{editing=null;render()};
         ta.addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();ok.click()} if(e.key==="Escape")no.click()});
@@ -176,21 +223,21 @@ function render(){
         if(focusEdit){focusEdit=false; setTimeout(()=>{ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)})}
       }else{
         txt=c("txt",n.text);
-        if(n.remindAt){const ch=document.createElement("span"); const late=!n.reminded&&n.remindAt<=Date.now(); ch.className="chip"+(n.reminded?" done":late?" late":""); ch.textContent=(n.reminded?"Eslatildi: ":"Eslatma: ")+fmt(n.remindAt); txt.append(ch)}
-        if(n.edited){const s=document.createElement("span"); s.className="edited"; const e=new Date(n.edited); s.textContent=`tahrirlandi: ${e.getDate()} ${OY_QISQA[e.getMonth()]}, ${pad(e.getHours())}:${pad(e.getMinutes())}`; txt.append(s)}
+        if(n.remindAt){const ch=document.createElement("span"); const late=!n.reminded&&n.remindAt<=Date.now(); ch.className="chip"+(n.reminded?" done":late?" late":""); ch.textContent=T(n.reminded?"reminded":"remindShort")+" "+fmt(n.remindAt); txt.append(ch)}
+        if(n.edited){const s=document.createElement("span"); s.className="edited"; s.textContent=T("edited")+" "+fmt(n.edited); txt.append(s)}
       }
       row.append(c("d",t.getDate()),m,c("t",time),txt);
       if(editing===n.id){/* tahrirlash paytida tugmalar yashirin */}
       else if(pending===n.id){
         const cf=document.createElement("div"); cf.className="confirm";
-        const y=document.createElement("button"); y.className="yes"; y.textContent="O'chirish"; y.onclick=()=>remove(n.id);
-        const no=document.createElement("button"); no.textContent="Yo'q"; no.onclick=()=>{pending=null;render()};
+        const y=document.createElement("button"); y.className="yes"; y.textContent=T("del"); y.onclick=()=>remove(n.id);
+        const no=document.createElement("button"); no.textContent=T("no"); no.onclick=()=>{pending=null;render()};
         cf.append(y,no); row.append(cf);
       }else{
         const acts=document.createElement("div"); acts.className="actions";
-        const ed=document.createElement("button"); ed.className="edit"; ed.title="Tahrirlash"; ed.setAttribute("aria-label","Tahrirlash"); ed.textContent="✎";
+        const ed=document.createElement("button"); ed.className="edit"; ed.title=T("edit"); ed.setAttribute("aria-label",T("edit")); ed.textContent="✎";
         ed.onclick=()=>{editing=n.id;draft=n.text;draftRemind=n.remindAt?toInput(n.remindAt):"";pending=null;focusEdit=true;render()};
-        const del=document.createElement("button"); del.className="del"; del.title="O'chirish"; del.setAttribute("aria-label","O'chirish"); del.textContent="✕";
+        const del=document.createElement("button"); del.className="del"; del.title=T("del"); del.setAttribute("aria-label",T("del")); del.textContent="✕";
         del.onclick=()=>{pending=n.id;editing=null;render()};
         acts.append(ed,del); row.append(acts);
       }
@@ -207,7 +254,7 @@ async function add(text,remindAt){
   const n={text,at:Date.now()};
   if(remindAt){n.remindAt=remindAt;n.reminded=false}
   if(mode==="db"){
-    try{await col.add(n)}catch(e){$("status").textContent="Saqlab bo'lmadi: internetni tekshirib, qayta urinib ko'ring."}
+    try{await col.add(n)}catch(e){setStatus("saveErr")}
   }else{n.id=String(n.at);notes.push(n);saveLocal();render()}
 }
 async function update(id,text,remindAt){
@@ -220,7 +267,7 @@ async function update(id,text,remindAt){
   if(remindChanged){patch.remindAt=remindAt||null;patch.reminded=false}
   if(mode==="db"){
     render();
-    try{await col.doc(id).update(patch)}catch(e){$("status").textContent="O'zgarishni saqlab bo'lmadi, qayta urinib ko'ring."}
+    try{await col.doc(id).update(patch)}catch(e){setStatus("updErr")}
   }else{if(n)Object.assign(n,patch); saveLocal();render()}
 }
 async function markReminded(n){
@@ -230,7 +277,7 @@ async function markReminded(n){
 }
 async function remove(id){
   pending=null;
-  if(mode==="db"){try{await col.doc(id).delete()}catch(e){$("status").textContent="O'chirib bo'lmadi, qayta urinib ko'ring."}}
+  if(mode==="db"){try{await col.doc(id).delete()}catch(e){setStatus("delErr")}}
   else{notes=notes.filter(n=>n.id!==id);saveLocal();render()}
 }
 
@@ -238,7 +285,7 @@ $("text").addEventListener("input",()=>{$("save").disabled=!$("text").value.trim
 $("text").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();$("f").requestSubmit()}});
 $("f").addEventListener("submit",e=>{e.preventDefault();const v=$("text").value.trim();if(!v)return;
   const r=toTs($("remind").value);
-  if(r&&r<=Date.now()){$("status").textContent="Eslatma vaqti o'tib ketgan. Kelajakdagi vaqtni tanlang.";return}
+  if(r&&r<=Date.now()){setStatus("past");return}
   if(r){try{if("Notification" in window&&Notification.permission==="default")Notification.requestPermission()}catch(e){}}
   add(v,r);$("text").value="";$("remind").value="";$("clearRemind").hidden=true;$("save").disabled=true;$("text").focus()});
 $("remind").addEventListener("input",()=>{$("clearRemind").hidden=!$("remind").value});
@@ -250,16 +297,15 @@ let actx=null;
 const unlockAudio=()=>{try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume()}catch(e){}};
 window.addEventListener("pointerdown",unlockAudio);window.addEventListener("keydown",unlockAudio);
 function beep(){if(!actx)return;try{const t0=actx.currentTime;[0,.3,.6].forEach((dt,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=i===2?1046:880;g.gain.setValueAtTime(0,t0+dt);g.gain.linearRampToValueAtTime(.25,t0+dt+.02);g.gain.exponentialRampToValueAtTime(.001,t0+dt+.25);o.connect(g).connect(actx.destination);o.start(t0+dt);o.stop(t0+dt+.3)})}catch(e){}}
-const baseTitle=document.title;
 function showAlert(n,missed){
   const a=document.createElement("div");a.className="alert";a.setAttribute("role","alert");
   const b=document.createElement("div");b.className="body";
-  const s=document.createElement("small");s.textContent=(missed?"O'tkazib yuborilgan eslatma · ":"Eslatma · ")+fmt(n.remindAt);
+  const s=document.createElement("small");s.textContent=T(missed?"missed":"alert")+" · "+fmt(n.remindAt);
   b.append(s,document.createTextNode(n.text));
-  const x=document.createElement("button");x.textContent="Yopish";x.onclick=()=>{a.remove();if(!$("alerts").children.length)document.title=baseTitle};
+  const x=document.createElement("button");x.textContent=T("close");x.onclick=()=>{a.remove();if(!$("alerts").children.length)document.title=T("title")};
   a.append(b,x);$("alerts").prepend(a);
   document.title="⏰ "+n.text.slice(0,40);
-  try{if("Notification" in window&&Notification.permission==="granted")new Notification("Eslatma",{body:n.text})}catch(e){}
+  try{if("Notification" in window&&Notification.permission==="granted")new Notification(T("alert"),{body:n.text})}catch(e){}
 }
 let ready=false;
 function checkReminders(){
@@ -271,23 +317,23 @@ function checkReminders(){
 setInterval(checkReminders,5000);
 $("q").addEventListener("input",render);
 
-loadLocal(); render(); $("status").textContent="";
+loadLocal(); applyLang();
 setTimeout(()=>{if(mode==="local"){ready=true;checkReminders()}},1500);
 
 (async()=>{
   const use=window.claude&&window.claude.use;
-  if(!use){$("status").textContent="Zametkalar shu brauzerda saqlanadi.";return}
+  if(!use){setStatus("local");return}
   const [db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
   const id=user&&await user.id();
-  if(!db||!id){$("status").textContent="Hisobingizga kiring — shunda zametkalar har qanday qurilmada saqlanib qoladi. Hozircha shu brauzerda saqlanadi.";return}
+  if(!db||!id){setStatus("signin");return}
   col=db.collection("data/users/"+id+"/notes"); mode="db";
-  $("status").textContent="Yuklanmoqda…";
-  const timer=setTimeout(()=>{$("status").textContent="Ma'lumotlar hali yuklanmadi, internetni tekshiring."},10000);
+  setStatus("loading");
+  const timer=setTimeout(()=>{setStatus("slow")},10000);
   col.onSnapshot(snap=>{
     notes=snap.docs.map(d=>({id:d.id,...d.data()})).filter(n=>typeof n.text==="string"&&typeof n.at==="number");
-    if(!snap.metadata.fromCache){clearTimeout(timer);if(!ready){ready=true;setTimeout(checkReminders,0)}$("status").textContent=notes.length?`${notes.length} ta zametka`:""}
+    if(!snap.metadata.fromCache){clearTimeout(timer);if(!ready){ready=true;setTimeout(checkReminders,0)}setStatus("count")}
     render();
-  },err=>{clearTimeout(timer);$("status").textContent="Zametkalarni yuklab bo'lmadi. Sahifani keyinroq oching."});
+  },err=>{clearTimeout(timer);setStatus("loadErr")});
 })();
 </script>
 
