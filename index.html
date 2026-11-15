@@ -20,10 +20,21 @@
   --bg:#f3f1ec; --paper:#fffefb; --ink:#1b1d22; --muted:#6f7480; --line:#e4e1d9;
   --rule:#d9e4f2; --margin:#f0a3a3; --cover:#2563eb; --cover-ink:#ffffff;
   --accent:#2563eb; --danger:#c2410c;
+  --soft:#efece6; --seg:#e9e6df; --dash:#cbc6bb; --icon:#b6b2a8; --timec:#b25a5a; --warnbg:#fde8df; --scrim:rgba(27,29,34,.35);
   --sans:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
   color-scheme:light;
 }
+/* Qora mavzu: telefon sozlamasiga qarab (Avto) yoki qo'lda tanlanganda */
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]):not([data-mode="light"]){
+  --bg:#121316; --paper:#1d1e22; --ink:#ececee; --muted:#9a9ca5; --line:#2e3036; --rule:#2a303b; --margin:#7d3b3b; --danger:#f08a5d;
+  --soft:#2a2b31; --seg:#26272c; --dash:#40424a; --icon:#6c6f78; --timec:#e39595; --warnbg:#3b2219; --scrim:rgba(0,0,0,.6); color-scheme:dark;}}
+:root[data-theme="dark"]:not([data-mode="light"]){
+  --bg:#121316; --paper:#1d1e22; --ink:#ececee; --muted:#9a9ca5; --line:#2e3036; --rule:#2a303b; --margin:#7d3b3b; --danger:#f08a5d;
+  --soft:#2a2b31; --seg:#26272c; --dash:#40424a; --icon:#6c6f78; --timec:#e39595; --warnbg:#3b2219; --scrim:rgba(0,0,0,.6); color-scheme:dark;}
+:root[data-mode="dark"]{
+  --bg:#121316; --paper:#1d1e22; --ink:#ececee; --muted:#9a9ca5; --line:#2e3036; --rule:#2a303b; --margin:#7d3b3b; --danger:#f08a5d;
+  --soft:#2a2b31; --seg:#26272c; --dash:#40424a; --icon:#6c6f78; --timec:#e39595; --warnbg:#3b2219; --scrim:rgba(0,0,0,.6); color-scheme:dark;}
 html,body{background:var(--bg)}
 body{color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5;-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer;color:inherit;border-radius:12px}
@@ -36,9 +47,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 /* ===== Bosh sahifa ===== */
 .hero{padding-block:22px 6px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ctrls{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:none}
 .hero h1{margin:0;font-size:2rem;font-weight:800;letter-spacing:-.025em;line-height:1.1}
 .hero .today{color:var(--muted);font-size:.92rem;margin-top:4px}
-.lang{display:flex;background:#e9e6df;border-radius:12px;padding:3px;flex:none}
+.lang{display:flex;background:var(--seg);border-radius:12px;padding:3px;flex:none}
 .lang button{border:0;background:none;color:var(--muted);padding:5px 11px;font-weight:700;font-size:.8rem;border-radius:9px}
 .lang button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .stats{display:flex;gap:10px;padding-block:14px 4px;flex-wrap:wrap}
@@ -54,7 +66,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;position:relative;z-index:1}
 .cover .meta{font-size:.78rem;opacity:.92;line-height:1.35;position:relative;z-index:1}
 .cover .meta b{font-size:1.5rem;display:block;font-weight:800;letter-spacing:-.02em;line-height:1.1}
-.newcover{aspect-ratio:3/4;max-width:100%;border:2px dashed #cbc6bb;border-radius:6px 16px 16px 6px;background:transparent;color:var(--muted);
+.newcover{aspect-ratio:3/4;max-width:100%;border:2px dashed var(--dash);border-radius:6px 16px 16px 6px;background:transparent;color:var(--muted);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-weight:700}
 .newcover .plus{width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:1.6rem;font-weight:500}
 .welcome{grid-column:1/-1;color:var(--muted);font-size:.95rem;padding:4px 2px}
@@ -62,7 +74,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .status:empty{display:none}
 
 /* ===== Varaq (dialog) ===== */
-.sheetdlg{position:fixed;inset:0;z-index:20;background:rgba(27,29,34,.35);display:flex;align-items:flex-end;justify-content:center}
+.sheetdlg{position:fixed;inset:0;z-index:20;background:var(--scrim);display:flex;align-items:flex-end;justify-content:center}
 .sheetdlg form,.sheetdlg .card{background:var(--paper);width:100%;max-width:520px;box-sizing:border-box;border-radius:22px 22px 0 0;
   padding:20px max(18px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;animation:up .22s ease}
 @media (min-width:600px){.sheetdlg{align-items:center}.sheetdlg form,.sheetdlg .card{border-radius:22px}}
@@ -76,7 +88,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .btns{display:flex;gap:10px}
 .btn{flex:1;border:0;padding:13px;font-weight:800}
 .btn.main{background:var(--cover);color:var(--cover-ink)}
-.btn.soft{background:#efece6}
+.btn.soft{background:var(--soft)}
 .btn.warn{background:var(--danger);color:#fff}
 
 /* ===== Daftar ichi ===== */
@@ -86,7 +98,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .band .ib{width:42px;height:42px;border:0;border-radius:12px;background:rgba(255,255,255,.18);color:inherit;display:grid;place-items:center;font-size:1.2rem;flex:none}
 .band h1{flex:1;min-width:0;margin:0;font-size:1.3rem;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .band .sub{font-size:.82rem;opacity:.9;margin:6px 0 10px 50px}
-.band .search{width:100%;box-sizing:border-box;border:0;border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.95)}
+.band .search{width:100%;box-sizing:border-box;border:0;border-radius:12px;padding:10px 14px;background:var(--paper)}
 .menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--paper);color:var(--ink);border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.18);display:flex;flex-direction:column;min-width:210px;overflow:hidden;z-index:6}
 .menu button{border:0;border-radius:0;background:none;text-align:left;padding:13px 16px}
 .menu button:hover{background:var(--bg)}
@@ -99,11 +111,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .page .date span{font-size:.82rem;color:var(--muted)}
 .ln{display:grid;grid-template-columns:62px 1fr auto;border-bottom:1px solid var(--rule);min-height:44px}
 .ln:last-child{border-bottom:0}
-.ln .time{font-family:var(--mono);font-size:.8rem;color:#b25a5a;padding:12px 8px 0 12px;border-right:2px solid var(--margin);font-variant-numeric:tabular-nums}
+.ln .time{font-family:var(--mono);font-size:.8rem;color:var(--timec);padding:12px 8px 0 12px;border-right:2px solid var(--margin);font-variant-numeric:tabular-nums}
 .ln .text{min-width:0;padding:10px 6px 10px 14px;white-space:pre-wrap;overflow-wrap:anywhere}
 .ln .edited{display:block;font-size:.72rem;color:var(--muted)}
 .ln .acts{display:flex;align-items:flex-start;padding:6px 4px 0 0}
-.ln .acts button{border:0;background:none;color:#b6b2a8;width:34px;height:32px;border-radius:8px;font-size:.95rem}
+.ln .acts button{border:0;background:none;color:var(--icon);width:34px;height:32px;border-radius:8px;font-size:.95rem}
 .ln .acts button:hover{color:var(--ink);background:var(--bg)}
 .ln .acts .del:hover{color:var(--danger)}
 .ln.editing{grid-template-columns:62px 1fr}
@@ -112,8 +124,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .chip{border:0;padding:6px 14px;font-size:.88rem;font-weight:700;border-radius:999px}
 .chip.main{background:var(--cover);color:var(--cover-ink)}
-.chip.soft{background:#efece6}
-.chip.warn{background:#fde8df;color:var(--danger)}
+.chip.soft{background:var(--soft)}
+.chip.warn{background:var(--warnbg);color:var(--danger)}
 .blank{background:var(--paper);border-radius:6px 14px 14px 6px;padding:28px 20px 28px 76px;color:var(--muted);position:relative;
   background-image:linear-gradient(to right,transparent 62px,var(--margin) 62px,var(--margin) 64px,transparent 64px)}
 
@@ -134,9 +146,16 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
         <h1 data-i18n="booksTitle">Daftarlarim</h1>
         <div class="today" id="todayLbl"></div>
       </div>
-      <div class="lang" role="group" aria-label="Til / Язык">
-        <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
-        <button type="button" data-lang="ru" aria-pressed="false">RU</button>
+      <div class="ctrls">
+        <div class="lang" role="group" aria-label="Til / Язык">
+          <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
+          <button type="button" data-lang="ru" aria-pressed="false">RU</button>
+        </div>
+        <div class="lang" role="group" id="themeSeg" data-i18n-aria="theme" aria-label="Rang">
+          <button type="button" data-mode="light" data-i18n="light">☀ Oq</button>
+          <button type="button" data-mode="dark" data-i18n="dark">☾ Qora</button>
+          <button type="button" data-mode="auto" data-i18n="auto">Avto</button>
+        </div>
       </div>
     </div>
     <div class="stats" id="stats"></div>
@@ -186,7 +205,7 @@ uz:{booksTitle:"Daftarlarim",back:"Orqaga",more:"Boshqa",rename:"Nomi va rangini
  count:n=>`${n} ta yozuv`,entries:"yozuv",last:"oxirgi:",emptyBook:"hali bo'sh",edit:"Tahrirlash",del:"O'chirish",save:"Saqlash",cancel:"Bekor qilish",
  edited:"tahrirlandi:",confirmDelBook:n=>`«${n}» daftari va undagi barcha yozuvlar o'chiriladi. Buni qaytarib bo'lmaydi.`,
  newBook:"Yangi daftar",newBookPh:"Nomi, masalan: Kabel hisoboti",color:"Muqova rangi",create:"Yaratish",editBook:"Daftarni o'zgartirish",
- statBooks:"daftar",statToday:"bugungi yozuv",
+ statBooks:"daftar",statToday:"bugungi yozuv",theme:"Rang",light:"☀ Oq",dark:"☾ Qora",auto:"Avto",
  err:"Saqlab bo'lmadi: internetni tekshirib, qayta urinib ko'ring.",loading:"Yuklanmoqda…",slow:"Ma'lumotlar hali yuklanmadi, internetni tekshiring.",
  loadErr:"Ma'lumotlarni yuklab bo'lmadi. Sahifani keyinroq oching.",oldNotes:"Zametkalar"},
 ru:{booksTitle:"Мои тетради",back:"Назад",more:"Ещё",rename:"Название и цвет",deleteBook:"Удалить тетрадь",
@@ -200,7 +219,7 @@ ru:{booksTitle:"Мои тетради",back:"Назад",more:"Ещё",rename:"�
  entries:"записей",last:"последняя:",emptyBook:"пока пусто",edit:"Редактировать",del:"Удалить",save:"Сохранить",cancel:"Отмена",
  edited:"изменено:",confirmDelBook:n=>`Тетрадь «${n}» и все записи в ней будут удалены. Это нельзя отменить.`,
  newBook:"Новая тетрадь",newBookPh:"Название, например: Отчёт по кабелю",color:"Цвет обложки",create:"Создать",editBook:"Изменить тетрадь",
- statBooks:"тетр.",statToday:"записей сегодня",
+ statBooks:"тетр.",statToday:"записей сегодня",theme:"Тема",light:"☀ Светлая",dark:"☾ Тёмная",auto:"Авто",
  err:"Не удалось сохранить: проверьте интернет и попробуйте снова.",loading:"Загрузка…",slow:"Данные ещё не загрузились, проверьте интернет.",
  loadErr:"Не удалось загрузить данные. Откройте страницу позже.",oldNotes:"Заметки"}
 };
@@ -219,6 +238,19 @@ const sameDay=(a,b)=>new Date(a).toDateString()===new Date(b).toDateString();
 let toastT=null;
 function toast(msg){const t=$("toast");t.textContent=msg;t.style.opacity="1";clearTimeout(toastT);toastT=setTimeout(()=>{t.style.opacity="0"},1600)}
 let statusKey=null;
+/* Oq / Qora / Avto mavzu */
+let themeMode="auto";
+try{const m=localStorage.getItem("zametka-theme");if(["light","dark","auto"].includes(m))themeMode=m}catch(e){}
+function applyTheme(){
+  const r=document.documentElement;
+  if(themeMode==="auto")r.removeAttribute("data-mode");else r.setAttribute("data-mode",themeMode);
+  document.querySelectorAll("#themeSeg button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===themeMode)));
+  const mt=document.querySelector('meta[name="theme-color"]');
+  if(mt)mt.content=getComputedStyle(r).getPropertyValue("--bg").trim()||"#f3f1ec";
+}
+document.querySelectorAll("#themeSeg button").forEach(b=>b.addEventListener("click",()=>{themeMode=b.dataset.mode;try{localStorage.setItem("zametka-theme",themeMode)}catch(e){}applyTheme()}));
+try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",applyTheme)}catch(e){}
+applyTheme();
 function setStatus(k){statusKey=k;$("status").textContent=k?T(k):""}
 
 /* ---------- Saqlash qatlami: Claude bazasi yoki brauzer xotirasi ---------- */
@@ -434,11 +466,11 @@ function applyLang(){
   document.querySelectorAll("[data-i18n]").forEach(x=>{x.textContent=T(x.dataset.i18n)});
   document.querySelectorAll("[data-i18n-ph]").forEach(x=>{x.placeholder=T(x.dataset.i18nPh)});
   document.querySelectorAll("[data-i18n-aria]").forEach(x=>{x.setAttribute("aria-label",T(x.dataset.i18nAria))});
-  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
+  document.querySelectorAll(".lang button[data-lang]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
   document.title=T("booksTitle");if(statusKey)setStatus(statusKey);
   tick();render();
 }
-document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;try{localStorage.setItem("zametka-lang",lang)}catch(e){}applyLang()}));
+document.querySelectorAll(".lang button[data-lang]").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;try{localStorage.setItem("zametka-lang",lang)}catch(e){}applyLang()}));
 
 $("lineForm").addEventListener("submit",async e=>{e.preventDefault();const raw=$("lineIn").value;
   const texts=raw.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);if(!texts.length||!cur){$("lineIn").focus();return}
