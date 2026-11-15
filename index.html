@@ -6,236 +6,400 @@
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>Mening Zametkalarim</title>
+<title>Mening Daftarlarim</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
-/* Layout: oq daftar — tepada katta yozish maydoni, pastda kunlar bo'yicha zametkalar: sana | vaqt | matn */
+/* Layout: oq daftar ilovasi — bosh sahifada daftarlar ro'yxati; daftar ichida har bir qator o'z sanasi va vaqti bilan, pastda yozish qatori */
 :root{
-  --bg:#f6f7f9; --paper:#ffffff; --ink:#16191f; --muted:#6b7280; --line:#dfe3ea;
+  --bg:#f6f7f9; --paper:#ffffff; --ink:#16191f; --muted:#6b7280; --line:#e3e7ee; --rule:#eef1f6;
   --accent:#2563eb; --accent-soft:#e8efff; --accent-ink:#ffffff; --danger:#c2410c;
   --sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
   color-scheme:light;
 }
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5}
-.wrap{max-width:680px;margin:0 auto;padding-block:20px 60px;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  display:flex;flex-direction:column;gap:18px}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-h1{font-size:1.5rem;font-weight:800;margin:0;letter-spacing:-.01em}
-.lang{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
-.lang button{border:0;border-radius:0;background:none;color:var(--muted);padding:6px 12px;font-weight:700;font-size:.85rem}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5}
+.wrap{max-width:680px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;cursor:pointer;border-radius:10px;color:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent-soft);outline-offset:1px}
+input{font:inherit;color:var(--ink)}
+.hidden{display:none!important}
+
+/* shapka */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:8px;padding-block:14px 10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.top h1{flex:1;min-width:0;margin:0;font-size:1.4rem;font-weight:800;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lang{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper);flex:none}
+.lang button{border:0;border-radius:0;background:none;color:var(--muted);padding:6px 11px;font-weight:700;font-size:.82rem}
 .lang button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-button{font:inherit;cursor:pointer;border-radius:10px}
-button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--accent-soft);outline-offset:1px}
+.iconbtn{border:0;background:var(--paper);width:42px;height:42px;display:grid;place-items:center;font-size:1.25rem;flex:none;border:1.5px solid var(--line)}
+.menu{position:absolute;right:0;top:calc(100% - 4px);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(22,25,31,.12);display:flex;flex-direction:column;min-width:200px;overflow:hidden}
+.menu button{border:0;border-radius:0;background:none;text-align:left;padding:12px 16px}
+.menu button:hover{background:var(--bg)}
+.menu .danger{color:var(--danger)}
 
-.composer{background:var(--paper);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(22,25,31,.06),0 6px 20px rgba(22,25,31,.06)}
-.composer label{font-weight:700;font-size:.95rem}
-.composer textarea{width:100%;box-sizing:border-box;min-height:130px;resize:vertical;border:2px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--paper);color:var(--ink);font:inherit;font-size:1.05rem}
-.composer textarea:focus{border-color:var(--accent);outline:none}
-.composer textarea::placeholder{color:#9aa1ad}
-.now{font-family:var(--mono);font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.big{width:100%;background:var(--accent);color:var(--accent-ink);border:0;padding:14px;font-weight:800;font-size:1.05rem}
-.big:active{transform:translateY(1px)}
-.flash{color:var(--accent);font-weight:700;font-size:.9rem;min-height:1.3em}
-
-.search{width:100%;box-sizing:border-box;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit}
-.status{color:var(--muted);font-size:.85rem}
+/* bosh sahifa */
+.create{display:flex;gap:8px;background:var(--paper);border-radius:14px;padding:10px;box-shadow:0 1px 2px rgba(22,25,31,.06),0 6px 20px rgba(22,25,31,.06)}
+.create input{flex:1;min-width:0;border:2px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--paper)}
+.create input:focus{border-color:var(--accent);outline:none}
+.primary{background:var(--accent);color:var(--accent-ink);border:0;padding:10px 16px;font-weight:800;flex:none}
+.books{display:flex;flex-direction:column;gap:10px;padding-block:16px 40px}
+.book{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px}
+.book:hover{border-color:var(--accent)}
+.spine{width:42px;height:52px;border-radius:6px 10px 10px 6px;background:var(--accent-soft);border-left:6px solid var(--accent);flex:none;display:grid;place-items:center;font-weight:800;color:var(--accent);font-size:1.1rem}
+.book .info{flex:1;min-width:0}
+.book .name{font-weight:800;font-size:1.05rem;overflow-wrap:anywhere}
+.book .meta{color:var(--muted);font-size:.84rem}
+.chev{color:var(--muted);font-size:1.3rem}
+.empty{border:2px dashed var(--line);border-radius:14px;padding:24px 18px;text-align:center;color:var(--muted)}
+.status{color:var(--muted);font-size:.85rem;padding-top:8px}
 .status:empty{display:none}
-.day{display:flex;flex-direction:column;gap:8px}
-.day h2{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:6px 0 0;font-weight:800}
-.note{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;padding:12px 10px 12px 12px;align-items:start}
-.date{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:52px;padding:6px 4px;border-radius:10px;background:var(--accent-soft);color:var(--accent);line-height:1.1}
-.date .d{font-family:var(--mono);font-weight:700;font-size:1.3rem}
-.date .m{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
-.date .t{font-family:var(--mono);font-size:.75rem;margin-top:3px;color:var(--ink);font-variant-numeric:tabular-nums}
-.body{min-width:0;display:flex;flex-direction:column;gap:4px;padding-top:2px}
-.txt{white-space:pre-wrap;overflow-wrap:anywhere}
-.edited{font-size:.75rem;color:var(--muted)}
-.actions{display:flex;gap:2px}
-.icon{border:0;background:none;color:var(--muted);width:38px;height:38px;font-size:1.1rem;display:grid;place-items:center}
-.icon:hover{background:var(--bg);color:var(--ink)}
-.icon.del:hover{color:var(--danger)}
-.confirm{display:flex;flex-direction:column;gap:6px}
-.confirm button,.ghost{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);padding:6px 12px;font-size:.88rem}
-.confirm .yes{border-color:var(--danger);color:var(--danger);font-weight:700}
-.editbox textarea{width:100%;box-sizing:border-box;min-height:90px;resize:vertical;border:2px solid var(--accent);border-radius:10px;padding:10px;background:var(--paper);color:var(--ink);font:inherit}
-.editbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.editbar .ok{background:var(--accent);color:var(--accent-ink);border:0;padding:7px 16px;font-weight:700;font-size:.9rem}
-.empty{border:2px dashed var(--line);border-radius:14px;padding:26px 18px;text-align:center;color:var(--muted)}
+
+/* daftar ichi */
+.search{width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper)}
+.sheet{flex:1;padding-block:12px 16px;display:flex;flex-direction:column;gap:14px}
+.daybox{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.dayhead{padding:9px 14px;font-size:.76rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft)}
+.ln{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:start;padding:9px 6px 9px 14px;border-top:1px solid var(--rule)}
+.ln:first-of-type{border-top:0}
+.ln .time{font-family:var(--mono);font-size:.82rem;color:var(--muted);padding-top:3px;font-variant-numeric:tabular-nums}
+.ln .text{min-width:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.ln .edited{display:block;font-size:.72rem;color:var(--muted)}
+.ln .acts{display:flex}
+.ln .acts button{border:0;background:none;color:#a0a7b4;width:34px;height:30px;font-size:.95rem}
+.ln .acts button:hover{color:var(--ink);background:var(--bg)}
+.ln .acts .del:hover{color:var(--danger)}
+.ln.editing{grid-template-columns:52px 1fr}
+.editin{width:100%;box-sizing:border-box;border:2px solid var(--accent);border-radius:8px;padding:6px 8px;background:var(--paper)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.ghost{border:1.5px solid var(--line);background:var(--paper);padding:5px 12px;font-size:.88rem}
+.small{padding:5px 12px;font-size:.88rem}
+.yes{border:1.5px solid var(--danger);background:var(--paper);color:var(--danger);font-weight:700;padding:5px 12px;font-size:.88rem}
+
+.composer{position:sticky;bottom:0;background:var(--bg);padding-block:8px calc(12px + env(safe-area-inset-bottom,0px))}
+.composer .box{display:flex;gap:8px;background:var(--paper);border:2px solid var(--accent);border-radius:14px;padding:6px;box-shadow:0 -4px 20px rgba(22,25,31,.06)}
+.composer input{flex:1;min-width:0;border:0;background:transparent;padding:8px;outline:none;font-size:1.02rem}
+.composer .hint{font-size:.78rem;color:var(--muted);padding:6px 4px 0;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:8px 16px;border-radius:999px;font-size:.88rem;font-weight:700;pointer-events:none;transition:opacity .2s}
+.dialog{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.dialog input{border:2px solid var(--accent);border-radius:10px;padding:9px 12px}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 
 <div class="wrap">
-  <header>
-    <h1 data-i18n="title">Zametkalarim</h1>
-    <div class="lang" role="group" aria-label="Til / Язык">
-      <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
-      <button type="button" data-lang="ru" aria-pressed="false">RU</button>
+  <!-- Bosh sahifa: daftarlar -->
+  <section id="home">
+    <div class="top">
+      <h1 data-i18n="booksTitle">Daftarlarim</h1>
+      <div class="lang" role="group" aria-label="Til / Язык">
+        <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
+        <button type="button" data-lang="ru" aria-pressed="false">RU</button>
+      </div>
     </div>
-  </header>
+    <form class="create" id="createForm">
+      <input id="newBook" data-i18n-ph="newBookPh" placeholder="Yangi daftar nomi, masalan: Kabel hisoboti" autocomplete="off">
+      <button class="primary" type="submit" data-i18n="create">Yaratish</button>
+    </form>
+    <div class="status" id="status"></div>
+    <div class="books" id="books"></div>
+  </section>
 
-  <form class="composer" id="f">
-    <label for="text" data-i18n="label">Bu yerga yozing</label>
-    <textarea id="text" data-i18n-ph="placeholder" placeholder="Masalan: Ertaga soat 10:00 da uchrashuv bor"></textarea>
-    <div class="now" id="now"></div>
-    <button class="big" id="save" type="submit" data-i18n="save">Saqlash</button>
-    <div class="flash" id="flash" aria-live="polite"></div>
-  </form>
-
-  <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Qidirish…">
-  <div class="status" id="status"></div>
-  <div id="out"></div>
+  <!-- Daftar ichi -->
+  <section id="bookView" class="hidden" style="display:flex;flex-direction:column;flex:1">
+    <div class="top" style="position:sticky">
+      <button class="iconbtn" id="back" type="button" data-i18n-aria="back" aria-label="Orqaga">←</button>
+      <h1 id="bookTitle"></h1>
+      <div style="position:relative">
+        <button class="iconbtn" id="moreBtn" type="button" aria-haspopup="true" data-i18n-aria="more" aria-label="Boshqa">⋯</button>
+        <div class="menu hidden" id="menu">
+          <button type="button" id="mRename" data-i18n="rename">Nomini o'zgartirish</button>
+          <button type="button" id="mDelete" class="danger" data-i18n="deleteBook">Daftarni o'chirish</button>
+        </div>
+      </div>
+    </div>
+    <div id="bookDialog"></div>
+    <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Shu daftardan qidirish…">
+    <div class="sheet" id="sheet"></div>
+    <form class="composer" id="lineForm">
+      <div class="box">
+        <input id="lineIn" data-i18n-ph="linePh" placeholder="Yozing va Enter bosing…" autocomplete="off" enterkeyhint="send">
+        <button class="primary" type="submit" data-i18n="add">Qo'shish</button>
+      </div>
+      <div class="hint" id="nowHint"></div>
+    </form>
+  </section>
 </div>
+<div class="toast" id="toast" style="opacity:0"></div>
 
 <script>
 const I18N={
-uz:{title:"Zametkalarim",label:"Bu yerga yozing",placeholder:"Masalan: Ertaga soat 10:00 da uchrashuv bor",save:"Saqlash",search:"Qidirish…",
- willSave:"Saqlanadigan vaqt:",saved:"Saqlandi ✓",typeFirst:"Avval yuqoridagi oq maydonga biror narsa yozing.",loading:"Yuklanmoqda…",
+uz:{booksTitle:"Daftarlarim",newBookPh:"Yangi daftar nomi, masalan: Kabel hisoboti",create:"Yaratish",back:"Orqaga",more:"Boshqa",
+ rename:"Nomini o'zgartirish",deleteBook:"Daftarni o'chirish",search:"Shu daftardan qidirish…",linePh:"Yozing va Enter bosing…",add:"Qo'shish",
+ willSave:"Vaqt avtomatik yoziladi:",added:"Qo'shildi ✓",created:"Daftar yaratildi",
  months:["Yanvar","Fevral","Mart","Aprel","May","Iyun","Iyul","Avgust","Sentabr","Oktabr","Noyabr","Dekabr"],
  monthsShort:["Yan","Fev","Mar","Apr","May","Iyun","Iyul","Avg","Sen","Okt","Noy","Dek"],
  days:["Yakshanba","Dushanba","Seshanba","Chorshanba","Payshanba","Juma","Shanba"],
- today:"Bugun",yesterday:"Kecha",emptySearch:"Bu so'z bo'yicha zametka topilmadi.",empty:"Hali zametka yo'q. Tepadagi maydonga yozing va «Saqlash» ni bosing.",
- editAria:"Zametkani tahrirlash",cancel:"Bekor qilish",edited:"tahrirlandi:",del:"O'chirish",no:"Yo'q",edit:"Tahrirlash",
- saveErr:"Saqlab bo'lmadi: internetni tekshirib, qayta urinib ko'ring.",updErr:"O'zgarishni saqlab bo'lmadi, qayta urinib ko'ring.",delErr:"O'chirib bo'lmadi, qayta urinib ko'ring.",
- local:"",signin:"",slow:"Ma'lumotlar hali yuklanmadi, internetni tekshiring.",loadErr:"Zametkalarni yuklab bo'lmadi. Sahifani keyinroq oching.",count:n=>`${n} ta zametka`},
-ru:{title:"Мои заметки",label:"Пишите здесь",placeholder:"Например: Завтра в 10:00 встреча",save:"Сохранить",search:"Поиск…",
- willSave:"Время сохранения:",saved:"Сохранено ✓",typeFirst:"Сначала напишите что-нибудь в белом поле выше.",loading:"Загрузка…",
+ today:"Bugun",yesterday:"Kecha",noBooks:"Hali daftar yo'q. Tepaga nom yozib «Yaratish» ni bosing. Masalan: «Kabel hisoboti».",
+ noLines:"Daftar bo'sh. Pastdagi qatorga yozing va «Qo'shish» ni bosing — sana va vaqt o'zi yoziladi.",noFound:"Bu so'z bo'yicha hech narsa topilmadi.",
+ count:n=>`${n} ta yozuv`,last:"oxirgi:",emptyBook:"bo'sh",edit:"Tahrirlash",del:"O'chirish",save:"Saqlash",cancel:"Bekor qilish",no:"Yo'q",
+ edited:"tahrirlandi:",confirmDelBook:n=>`«${n}» daftari va undagi barcha yozuvlar o'chiriladi.`,newName:"Yangi nom",
+ err:"Saqlab bo'lmadi: internetni tekshirib, qayta urinib ko'ring.",loading:"Yuklanmoqda…",slow:"Ma'lumotlar hali yuklanmadi, internetni tekshiring.",
+ loadErr:"Ma'lumotlarni yuklab bo'lmadi. Sahifani keyinroq oching.",oldNotes:"Zametkalar"},
+ru:{booksTitle:"Мои тетради",newBookPh:"Название новой тетради, например: Отчёт по кабелю",create:"Создать",back:"Назад",more:"Ещё",
+ rename:"Переименовать",deleteBook:"Удалить тетрадь",search:"Поиск в этой тетради…",linePh:"Пишите и нажмите Enter…",add:"Добавить",
+ willSave:"Время запишется автоматически:",added:"Добавлено ✓",created:"Тетрадь создана",
  months:["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"],
  monthsShort:["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"],
  days:["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
- today:"Сегодня",yesterday:"Вчера",emptySearch:"По этому запросу заметок не найдено.",empty:"Заметок пока нет. Напишите в поле вверху и нажмите «Сохранить».",
- editAria:"Редактировать заметку",cancel:"Отмена",edited:"изменено:",del:"Удалить",no:"Нет",edit:"Редактировать",
- saveErr:"Не удалось сохранить: проверьте интернет и попробуйте снова.",updErr:"Не удалось сохранить изменения, попробуйте снова.",delErr:"Не удалось удалить, попробуйте снова.",
- local:"",signin:"",slow:"Данные ещё не загрузились, проверьте интернет.",loadErr:"Не удалось загрузить заметки. Откройте страницу позже.",
- count:n=>{const a=n%10,b=n%100;const w=a===1&&b!==11?"заметка":a>=2&&a<=4&&(b<12||b>14)?"заметки":"заметок";return `${n} ${w}`}}
+ today:"Сегодня",yesterday:"Вчера",noBooks:"Тетрадей пока нет. Введите название вверху и нажмите «Создать». Например: «Отчёт по кабелю».",
+ noLines:"Тетрадь пуста. Напишите в строке внизу и нажмите «Добавить» — дата и время запишутся сами.",noFound:"По этому запросу ничего не найдено.",
+ count:n=>{const a=n%10,b=n%100;const w=a===1&&b!==11?"запись":a>=2&&a<=4&&(b<12||b>14)?"записи":"записей";return `${n} ${w}`},
+ last:"последняя:",emptyBook:"пусто",edit:"Редактировать",del:"Удалить",save:"Сохранить",cancel:"Отмена",no:"Нет",
+ edited:"изменено:",confirmDelBook:n=>`Тетрадь «${n}» и все записи в ней будут удалены.`,newName:"Новое название",
+ err:"Не удалось сохранить: проверьте интернет и попробуйте снова.",loading:"Загрузка…",slow:"Данные ещё не загрузились, проверьте интернет.",
+ loadErr:"Не удалось загрузить данные. Откройте страницу позже.",oldNotes:"Заметки"}
 };
 let lang="uz";
 try{const s=localStorage.getItem("zametka-lang");lang=I18N[s]?s:(navigator.language||"").toLowerCase().startsWith("ru")?"ru":"uz"}catch(e){}
 const T=k=>I18N[lang][k];
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,"0");
-let notes=[], col=null, pending=null, mode="local", editing=null, draft="", focusEdit=false, statusKey=null, flashTimer=null;
-const fmt=ts=>{const d=new Date(ts);return `${d.getDate()} ${T("monthsShort")[d.getMonth()]}, ${pad(d.getHours())}:${pad(d.getMinutes())}`};
-function setStatus(k){statusKey=k;showStatus()}
-function showStatus(){$("status").textContent=!statusKey?"":statusKey==="count"?(notes.length?T("count")(notes.length):""):T(statusKey)}
-function flash(k){$("flash").textContent=T(k);clearTimeout(flashTimer);flashTimer=setTimeout(()=>{$("flash").textContent=""},2500)}
-
-function applyLang(){
-  document.documentElement.lang=lang;
-  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=T(el.dataset.i18n)});
-  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{el.placeholder=T(el.dataset.i18nPh)});
-  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
-  document.title=T("title"); $("flash").textContent="";
-  tick();showStatus();render();
-}
-document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;try{localStorage.setItem("zametka-lang",lang)}catch(e){}applyLang()}));
-
-function tick(){const d=new Date();$("now").textContent=`${T("willSave")} ${d.getDate()} ${T("months")[d.getMonth()]} ${d.getFullYear()}, ${T("days")[d.getDay()]} · ${pad(d.getHours())}:${pad(d.getMinutes())}`}
-setInterval(tick,10000);
-
+const hm=ts=>{const d=new Date(ts);return `${pad(d.getHours())}:${pad(d.getMinutes())}`};
+const fmt=ts=>{const d=new Date(ts);return `${d.getDate()} ${T("monthsShort")[d.getMonth()]}, ${hm(ts)}`};
+const newId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!=null)x.textContent=text;return x};
 function dayLabel(d){
-  const now=new Date(), y=new Date(now); y.setDate(now.getDate()-1);
+  const now=new Date(),y=new Date(now);y.setDate(now.getDate()-1);
   const same=(a,b)=>a.toDateString()===b.toDateString();
   const base=`${d.getDate()} ${T("months")[d.getMonth()]}${d.getFullYear()!==now.getFullYear()?" "+d.getFullYear():""}, ${T("days")[d.getDay()]}`;
   return same(d,now)?T("today")+" — "+base:same(d,y)?T("yesterday")+" — "+base:base;
 }
-const el=(tag,cls,text)=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text!=null)x.textContent=text;return x};
+let toastT=null;
+function toast(msg){const t=$("toast");t.textContent=msg;t.style.opacity="1";clearTimeout(toastT);toastT=setTimeout(()=>{t.style.opacity="0"},1600)}
+let statusKey=null;
+function setStatus(k){statusKey=k;$("status").textContent=k?T(k):""}
+
+/* ---------- Saqlash qatlami: Claude bazasi yoki brauzer xotirasi ---------- */
+let mode="local", db=null, uid=null;
+let books=[], lines=[], cur=null, unsubLines=null;
+const LKEY="daftarlar";
+function L(){try{return JSON.parse(localStorage.getItem(LKEY)||"null")||{books:[],lines:{}}}catch(e){return {books:[],lines:{}}}}
+function Lsave(s){try{localStorage.setItem(LKEY,JSON.stringify(s))}catch(e){}}
+function migrateOldLocal(){ // eski zametkalar -> "Zametkalar" daftari
+  try{
+    const old=JSON.parse(localStorage.getItem("zametkalar")||"[]");
+    if(!old.length||localStorage.getItem("zametkalar-migrated"))return;
+    const s=L(),id=newId("b");
+    s.books.push({id,title:T("oldNotes"),at:Date.now(),updated:Math.max(...old.map(n=>n.at)),count:old.length});
+    s.lines[id]=old.map(n=>({id:newId("l"),text:n.text,at:n.at,...(n.edited?{edited:n.edited}:{})}));
+    Lsave(s);localStorage.setItem("zametkalar-migrated","1");
+  }catch(e){}
+}
+const booksCol=()=>db.collection("data/users/"+uid);
+const linesCol=bid=>db.collection(`data/users/${uid}/${bid}/lines`);
+
+function refreshLocal(){const s=L();books=s.books;if(cur)lines=s.lines[cur]||[];render()}
+
+async function createBook(title){
+  const b={id:newId("b"),title,at:Date.now(),updated:Date.now(),count:0};
+  if(mode==="db"){const {id,...data}=b;try{await booksCol().doc(id).set(data)}catch(e){toast(T("err"));return null}}
+  else{const s=L();s.books.push(b);Lsave(s);refreshLocal()}
+  return b.id;
+}
+async function renameBook(id,title){
+  if(mode==="db"){try{await booksCol().doc(id).update({title})}catch(e){toast(T("err"))}}
+  else{const s=L(),b=s.books.find(x=>x.id===id);if(b)b.title=title;Lsave(s);refreshLocal()}
+}
+async function deleteBook(id){
+  if(mode==="db"){
+    try{const snap=await linesCol(id).get();for(const d of snap.docs)await linesCol(id).doc(d.id).delete();await booksCol().doc(id).delete()}catch(e){toast(T("err"))}
+  }else{const s=L();s.books=s.books.filter(b=>b.id!==id);delete s.lines[id];Lsave(s);refreshLocal()}
+}
+async function addLines(bid,texts){
+  const now=Date.now(),b=books.find(x=>x.id===bid);
+  const items=texts.map((text,i)=>({id:newId("l")+i,text,at:now}));
+  const count=(b&&b.count||0)+items.length;
+  if(mode==="db"){
+    try{for(const it of items){const {id,...data}=it;await linesCol(bid).doc(id).set(data)}
+        await booksCol().doc(bid).update({updated:now,count})}catch(e){toast(T("err"));return false}
+  }else{const s=L();(s.lines[bid]=s.lines[bid]||[]).push(...items);const bb=s.books.find(x=>x.id===bid);if(bb){bb.updated=now;bb.count=s.lines[bid].length}Lsave(s);refreshLocal()}
+  return true;
+}
+async function editLine(bid,lid,text){
+  const edited=Date.now();
+  if(mode==="db"){try{await linesCol(bid).doc(lid).update({text,edited})}catch(e){toast(T("err"))}}
+  else{const s=L(),l=(s.lines[bid]||[]).find(x=>x.id===lid);if(l){l.text=text;l.edited=edited}Lsave(s);refreshLocal()}
+}
+async function deleteLine(bid,lid){
+  const b=books.find(x=>x.id===bid);
+  if(mode==="db"){try{await linesCol(bid).doc(lid).delete();await booksCol().doc(bid).update({count:Math.max(0,(b&&b.count||1)-1)})}catch(e){toast(T("err"))}}
+  else{const s=L();s.lines[bid]=(s.lines[bid]||[]).filter(x=>x.id!==lid);const bb=s.books.find(x=>x.id===bid);if(bb)bb.count=s.lines[bid].length;Lsave(s);refreshLocal()}
+}
+function watchLines(bid){
+  if(unsubLines){unsubLines();unsubLines=null}
+  lines=[];
+  if(mode==="db"){
+    unsubLines=linesCol(bid).onSnapshot(snap=>{
+      lines=snap.docs.map(d=>({id:d.id,...d.data()})).filter(l=>typeof l.text==="string"&&typeof l.at==="number");
+      renderBook(true);
+    },()=>toast(T("loadErr")));
+  }else lines=L().lines[bid]||[];
+}
+
+/* ---------- Ko'rinish ---------- */
+let editingId=null, editDraft="", pendingDel=null, dialog=null, stickBottom=true;
+
+function route(){
+  const m=location.hash.match(/^#d-([A-Za-z0-9]+)$/);
+  const id=m?m[1]:null;
+  if(id!==cur){cur=id;editingId=null;pendingDel=null;dialog=null;$("q").value="";$("menu").classList.add("hidden");if(cur){watchLines(cur);stickBottom=true}else if(unsubLines){unsubLines();unsubLines=null}}
+  render();
+  if(cur)setTimeout(()=>{window.scrollTo(0,document.body.scrollHeight)},0);
+}
+window.addEventListener("hashchange",route);
 
 function render(){
-  const q=$("q").value.trim().toLowerCase();
-  const list=notes.filter(n=>!q||n.text.toLowerCase().includes(q)).sort((a,b)=>b.at-a.at);
-  const out=$("out"); out.textContent="";
-  if(!list.length){out.append(el("div","empty",q?T("emptySearch"):T("empty")));return}
-  const groups=new Map();
-  for(const n of list){const d=new Date(n.at),k=d.toDateString(); if(!groups.has(k))groups.set(k,{d,items:[]}); groups.get(k).items.push(n)}
-  const wrap=el("div"); wrap.style.cssText="display:flex;flex-direction:column;gap:16px";
-  for(const {d,items} of groups.values()){
-    const sec=el("section","day"); sec.append(el("h2",null,dayLabel(d)));
-    for(const n of items){
-      const t=new Date(n.at);
-      const row=el("div","note");
-      const date=el("div","date"); date.append(el("span","d",t.getDate()),el("span","m",T("monthsShort")[t.getMonth()]),el("span","t",`${pad(t.getHours())}:${pad(t.getMinutes())}`));
-      const body=el("div","body");
-      if(editing===n.id){
-        body.classList.add("editbox");
-        const ta=el("textarea"); ta.id="edit-"+n.id; ta.value=draft; ta.setAttribute("aria-label",T("editAria")); ta.oninput=()=>{draft=ta.value};
-        const bar=el("div","editbar");
-        const ok=el("button","ok",T("save")); const no=el("button","ghost",T("cancel"));
-        ok.onclick=()=>{const v=draft.trim(); if(v)update(n.id,v)};
-        no.onclick=()=>{editing=null;render()};
-        ta.addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();ok.click()} if(e.key==="Escape")no.click()});
-        bar.append(ok,no); body.append(ta,bar);
-        if(focusEdit){focusEdit=false; setTimeout(()=>{ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)})}
-      }else{
-        body.append(el("div","txt",n.text));
-        if(n.edited)body.append(el("span","edited",T("edited")+" "+fmt(n.edited)));
-      }
-      row.append(date,body);
-      if(editing===n.id){row.style.gridTemplateColumns="auto 1fr"}
-      else if(pending===n.id){
-        const cf=el("div","confirm");
-        const y=el("button","yes",T("del")); y.onclick=()=>remove(n.id);
-        const no=el("button",null,T("no")); no.onclick=()=>{pending=null;render()};
-        cf.append(y,no); row.append(cf);
-      }else{
-        const acts=el("div","actions");
-        const ed=el("button","icon","✎"); ed.title=T("edit"); ed.setAttribute("aria-label",T("edit"));
-        ed.onclick=()=>{editing=n.id;draft=n.text;pending=null;focusEdit=true;render()};
-        const del=el("button","icon del","✕"); del.title=T("del"); del.setAttribute("aria-label",T("del"));
-        del.onclick=()=>{pending=n.id;editing=null;render()};
-        acts.append(ed,del); row.append(acts);
-      }
-      sec.append(row);
-    }
-    wrap.append(sec);
+  const b=cur&&books.find(x=>x.id===cur);
+  $("home").classList.toggle("hidden",!!b);
+  $("bookView").classList.toggle("hidden",!b);
+  if(b)renderBook();else renderHome();
+}
+function renderHome(){
+  const box=$("books");box.textContent="";
+  if(!books.length){box.append(el("div","empty",T("noBooks")));return}
+  for(const b of [...books].sort((a,c)=>(c.updated||c.at)-(a.updated||a.at))){
+    const btn=el("button","book");btn.type="button";
+    const sp=el("div","spine",(b.title||"?").trim().charAt(0).toUpperCase());
+    const info=el("div","info");info.append(el("div","name",b.title));
+    info.append(el("div","meta",b.count?`${T("count")(b.count)} · ${T("last")} ${fmt(b.updated||b.at)}`:T("emptyBook")));
+    btn.append(sp,info,el("span","chev","›"));
+    btn.onclick=()=>{location.hash="d-"+b.id};
+    box.append(btn);
   }
-  out.append(wrap);
+}
+function renderBook(fromSnap){
+  const b=books.find(x=>x.id===cur);if(!b)return;
+  $("bookTitle").textContent=b.title;
+  const dl=$("bookDialog");dl.textContent="";
+  if(dialog==="rename"){
+    const d=el("form","dialog");const inp=el("input");inp.id="renameIn";inp.value=b.title;inp.setAttribute("aria-label",T("newName"));
+    const r=el("div","row");const ok=el("button","primary small",T("save"));ok.type="submit";const no=el("button","ghost",T("cancel"));no.type="button";
+    no.onclick=()=>{dialog=null;render()};
+    d.onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(v){renameBook(b.id,v)}dialog=null;render()};
+    r.append(ok,no);d.append(inp,r);dl.append(d);setTimeout(()=>inp.focus());
+  }else if(dialog==="delete"){
+    const d=el("div","dialog");d.append(el("div",null,T("confirmDelBook")(b.title)));
+    const r=el("div","row");const y=el("button","yes",T("deleteBook"));const no=el("button","ghost",T("no"));
+    y.onclick=async()=>{dialog=null;const id=b.id;location.hash="";await deleteBook(id)};
+    no.onclick=()=>{dialog=null;render()};
+    r.append(y,no);d.append(r);dl.append(d);
+  }
+  const q=$("q").value.trim().toLowerCase();
+  const list=lines.filter(l=>!q||l.text.toLowerCase().includes(q)).sort((a,c)=>a.at-c.at||(a.id<c.id?-1:1));
+  const sh=$("sheet");sh.textContent="";
+  if(!list.length){sh.append(el("div","empty",q?T("noFound"):T("noLines")));return}
+  const groups=new Map();
+  for(const l of list){const d=new Date(l.at),k=d.toDateString();if(!groups.has(k))groups.set(k,{d,items:[]});groups.get(k).items.push(l)}
+  for(const {d,items} of groups.values()){
+    const box=el("div","daybox");box.append(el("div","dayhead",dayLabel(d)));
+    for(const l of items){
+      const row=el("div","ln");row.append(el("div","time",hm(l.at)));
+      if(editingId===l.id){
+        row.classList.add("editing");
+        const w=el("form");const inp=el("input","editin");inp.id="edit-"+l.id;inp.value=editDraft;inp.oninput=()=>{editDraft=inp.value};
+        const r=el("div","row");const ok=el("button","primary small",T("save"));ok.type="submit";const no=el("button","ghost",T("cancel"));no.type="button";
+        no.onclick=()=>{editingId=null;render()};
+        inp.onkeydown=e=>{if(e.key==="Escape")no.click()};
+        w.onsubmit=e=>{e.preventDefault();const v=editDraft.trim();editingId=null;if(v&&v!==l.text)editLine(cur,l.id,v);render()};
+        r.append(ok,no);w.append(inp,r);row.append(w);
+        if(!fromSnap)setTimeout(()=>{inp.focus()});
+      }else{
+        const tx=el("div","text",l.text);if(l.edited)tx.append(el("span","edited",T("edited")+" "+fmt(l.edited)));
+        row.append(tx);
+        const a=el("div","acts");
+        if(pendingDel===l.id){
+          const y=el("button","yes",T("del"));y.style.width="auto";y.onclick=()=>{pendingDel=null;deleteLine(cur,l.id)};
+          const no=el("button","ghost",T("no"));no.style.width="auto";no.onclick=()=>{pendingDel=null;render()};
+          a.style.gap="6px";a.append(y,no);
+        }else{
+          const ed=el("button",null,"✎");ed.type="button";ed.title=T("edit");ed.setAttribute("aria-label",T("edit"));
+          ed.onclick=()=>{editingId=l.id;editDraft=l.text;pendingDel=null;render()};
+          const del=el("button","del","✕");del.type="button";del.title=T("del");del.setAttribute("aria-label",T("del"));
+          del.onclick=()=>{pendingDel=l.id;editingId=null;render()};
+          a.append(ed,del);
+        }
+        row.append(a);
+      }
+      box.append(row);
+    }
+    sh.append(box);
+  }
+  if(fromSnap&&stickBottom)window.scrollTo(0,document.body.scrollHeight);
 }
 
-function saveLocal(){try{localStorage.setItem("zametkalar",JSON.stringify(notes))}catch(e){}}
-function loadLocal(){try{notes=JSON.parse(localStorage.getItem("zametkalar")||"[]")}catch(e){notes=[]}}
+function tick(){const d=new Date();$("nowHint").textContent=`${T("willSave")} ${d.getDate()} ${T("months")[d.getMonth()]}, ${hm(d)}`}
+setInterval(tick,10000);
 
-async function add(text){
-  const n={text,at:Date.now()};
-  if(mode==="db"){try{await col.add(n)}catch(e){setStatus("saveErr")}}
-  else{n.id=String(n.at);notes.push(n);saveLocal();render()}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(x=>{x.textContent=T(x.dataset.i18n)});
+  document.querySelectorAll("[data-i18n-ph]").forEach(x=>{x.placeholder=T(x.dataset.i18nPh)});
+  document.querySelectorAll("[data-i18n-aria]").forEach(x=>{x.setAttribute("aria-label",T(x.dataset.i18nAria))});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===lang)));
+  document.title=T("booksTitle");if(statusKey)setStatus(statusKey);
+  tick();render();
 }
-async function update(id,text){
-  editing=null;
-  const n=notes.find(x=>x.id===id);
-  if(n&&n.text===text){render();return}
-  const patch={text,edited:Date.now()};
-  if(mode==="db"){render();try{await col.doc(id).update(patch)}catch(e){setStatus("updErr")}}
-  else{if(n)Object.assign(n,patch);saveLocal();render()}
-}
-async function remove(id){
-  pending=null;
-  if(mode==="db"){try{await col.doc(id).delete()}catch(e){setStatus("delErr")}}
-  else{notes=notes.filter(n=>n.id!==id);saveLocal();render()}
-}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{lang=b.dataset.lang;try{localStorage.setItem("zametka-lang",lang)}catch(e){}applyLang()}));
 
-$("text").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();$("f").requestSubmit()}});
-$("f").addEventListener("submit",e=>{e.preventDefault();const v=$("text").value.trim();
-  if(!v){flash("typeFirst");$("text").focus();return}
-  tick();add(v);$("text").value="";flash("saved")});
-$("q").addEventListener("input",render);
+$("createForm").addEventListener("submit",async e=>{e.preventDefault();const v=$("newBook").value.trim();if(!v){$("newBook").focus();return}
+  $("newBook").value="";const id=await createBook(v);if(id){toast(T("created"));location.hash="d-"+id}});
+$("lineForm").addEventListener("submit",async e=>{e.preventDefault();const raw=$("lineIn").value;
+  const texts=raw.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);if(!texts.length||!cur){$("lineIn").focus();return}
+  $("lineIn").value="";stickBottom=true;$("q").value="";
+  if(await addLines(cur,texts)){toast(T("added"));tick();setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),50)}
+  $("lineIn").focus()});
+$("lineIn").addEventListener("paste",e=>{const t=(e.clipboardData||window.clipboardData).getData("text");if(t&&t.includes("\n")){e.preventDefault();$("lineIn").value=t;$("lineForm").requestSubmit()}});
+$("back").onclick=()=>{location.hash=""};
+$("moreBtn").onclick=e=>{e.stopPropagation();$("menu").classList.toggle("hidden")};
+document.addEventListener("click",()=>$("menu").classList.add("hidden"));
+$("mRename").onclick=()=>{dialog="rename";render()};
+$("mDelete").onclick=()=>{dialog="delete";render()};
+$("q").addEventListener("input",()=>{stickBottom=false;renderBook()});
+window.addEventListener("scroll",()=>{stickBottom=window.innerHeight+window.scrollY>=document.body.scrollHeight-80},{passive:true});
 
-loadLocal(); applyLang();
+/* ---------- Ishga tushirish ---------- */
+migrateOldLocal(); refreshLocal(); applyLang(); route();
 
 (async()=>{
   if(!(window.claude&&window.claude.use))return;
-  const [db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
+  const [d,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
   const id=user&&await user.id();
-  if(!db||!id)return;
-  col=db.collection("data/users/"+id+"/notes"); mode="db";
+  if(!d||!id)return;
+  db=d;uid=id;
+  const local=L();
   setStatus("loading");
-  const timer=setTimeout(()=>{setStatus("slow")},10000);
-  col.onSnapshot(snap=>{
-    notes=snap.docs.map(d=>({id:d.id,...d.data()})).filter(n=>typeof n.text==="string"&&typeof n.at==="number");
-    if(!snap.metadata.fromCache){clearTimeout(timer);setStatus("count")}
-    render();
-  },err=>{clearTimeout(timer);setStatus("loadErr")});
+  const timer=setTimeout(()=>setStatus("slow"),10000);
+  let first=true;
+  booksCol().onSnapshot(async snap=>{
+    const list=snap.docs.map(x=>({id:x.id,...x.data()})).filter(b=>typeof b.title==="string");
+    if(snap.metadata.fromCache&&first)return;
+    clearTimeout(timer);setStatus(null);
+    if(first){
+      first=false;mode="db";
+      // brauzerdagi daftarlarni bir marta bazaga ko'chirish
+      if(local.books.length&&!(()=>{try{return localStorage.getItem("daftarlar-synced")}catch(e){return 1}})()){
+        try{
+          for(const b of local.books){if(list.some(x=>x.id===b.id))continue;const {id:bid,...data}=b;await booksCol().doc(bid).set(data);
+            for(const l of local.lines[b.id]||[]){const {id:lid,...ld}=l;await linesCol(bid).doc(lid).set(ld)}}
+          localStorage.setItem("daftarlar-synced","1");
+        }catch(e){}
+      }
+      if(cur)watchLines(cur);
+    }
+    books=list;render();
+  },()=>{clearTimeout(timer);setStatus("loadErr")});
 })();
 </script>
 
